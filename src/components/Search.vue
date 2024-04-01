@@ -352,21 +352,14 @@ export default {
       } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
         errorMessages += "請選填學期\n";
       }
-      if (selectedCollege.value.trim() === "" || selectedDepartment.value.trim() === "") {
-        errorMessages += "請選擇院所及科系\n";
-      }
 
       if (errorMessages) {
         alert(errorMessages);
       } else {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
+          w_dept_no: selectedDepartment.value,
           w_std_no: inputStudentID.value.trim(),
-          chi_name: "",
-          st_state: "",
-          dept_name_s: selectedDepartment.value,
-          degree: "",
-          sw_class: "",
         };
 
         try {
@@ -416,21 +409,44 @@ export default {
       } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
         errorMessages += "請選填學期\n";
       }
-      if (selectedCollege.value.trim() === "" || selectedDepartment.value.trim() === "") {
+      /* if (selectedCollege.value.trim() === "" || selectedDepartment.value.trim() === "") {
         errorMessages += "請選擇院所及科系\n";
-      }
+      } */
 
       if (errorMessages) {
         alert(errorMessages);
       } else {
         const requestData = {
-          w_smtr: inputAcademicYear.value + inputSemester.value,
+          /* w_smtr: inputAcademicYear.value + inputSemester.value,
           w_std_no: inputStudentID.value.trim(),
           chi_name: "",
           st_state: "",
           dept_name_s: selectedDepartment.value,
           degree: "",
-          sw_class: "",
+          sw_class: "", */
+          w_smtr: inputAcademicYear.value + inputSemester.value,
+          advisor: "",
+          w_dept_no: selectedDepartment.value,
+          w_degree: "",
+          w_std_no: inputStudentID.value.trim(),
+          chi_name: "",
+          state: "",
+          w_cos_id: "",
+          w_cos_class: "",
+          cos_cname: "",
+          cos_credit: "",
+          teacher_name: "",
+          cos_year: "",
+          tch_dept_no: "",
+          cos_type: "",
+          w_memo: "",
+          ins_user: "",
+          ins_time: "",
+          ins_ip: "",
+          print_time: "",
+          address: "",
+          parent: "",
+          w_std_total_credit: "",
         };
 
         try {
@@ -456,24 +472,44 @@ export default {
 
               // 標頭
               worksheet.addRow([
-                "w_smtr",
-                "w_std_no",
-                "chi_name",
-                "st_state",
-                "dept_name_s",
-                "degree",
-                "sw_class",
+                "導師姓名",
+                "系所",
+                "年級",
+                "班別",
+                "學號",
+                "姓名",
+                "開課課程 - 課號",
+                "開課課程 - 班別",
+                "開課課程 - 學分數",
+                "開課教師",
+                "開課年級",
+                "教師所屬系所",
+                "必選修",
+                "期中預警備註說明",
+                "開課教師登錄日期",
               ]);
 
               response.data.forEach((rowData) => {
                 worksheet.addRow([
-                  rowData.w_smtr,
+                  rowData.advisor,
+                  rowData.w_dept_no,
+                  rowData.w_degree,
                   rowData.w_std_no,
                   rowData.chi_name,
-                  rowData.st_state,
-                  rowData.dept_name_s,
-                  rowData.degree,
-                  rowData.sw_class,
+                  rowData.w_cos_id,
+                  rowData.w_cos_class,
+                  rowData.cos_cname,
+                  rowData.cos_credit,
+                  rowData.teacher_name,
+                  rowData.cos_year,
+                  rowData.tch_dept_no,
+                  rowData.cos_type,
+                  rowData.w_memo,
+                  rowData.ins_user,
+                  rowData.ins_time,
+                  rowData.print_time,
+                  rowData.address,
+                  rowData.parent,
                 ]);
               });
 
