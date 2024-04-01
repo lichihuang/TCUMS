@@ -417,13 +417,6 @@ export default {
         alert(errorMessages);
       } else {
         const requestData = {
-          /* w_smtr: inputAcademicYear.value + inputSemester.value,
-          w_std_no: inputStudentID.value.trim(),
-          chi_name: "",
-          st_state: "",
-          dept_name_s: selectedDepartment.value,
-          degree: "",
-          sw_class: "", */
           w_smtr: inputAcademicYear.value + inputSemester.value,
           advisor: "",
           w_dept_no: selectedDepartment.value,

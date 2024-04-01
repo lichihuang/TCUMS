@@ -58,13 +58,38 @@
                             <input type="checkbox" v-model="printSelection[index]" />
                           </td>
                           <td>
-                            {{ item.dept_name_s }}{{ item.degree }}{{ item.sw_class
-                            }}<br />
-                            {{ item.w_std_no }}<br />{{ item.chi_name }}<br />狀態：{{
-                              item.st_state
-                            }}<br />Date：<br />IP：<br />User：
+                            <b
+                              >{{ item.w_dept_no }}&nbsp;{{ item.w_degree
+                              }}{{ item.w_class }}<br />
+                              {{ item.w_std_no }}<br />{{ item.chi_name }}</b
+                            ><br /><span class="std-state-text"
+                              ><b>狀態：{{ item.state }}</b></span
+                            ><br /><span class="etc-content-text"
+                              >★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />Date：{{
+                                item.ins_time
+                              }}<br />IP：{{ item.ins_ip }}<br />User：{{
+                                item.ins_user
+                              }}</span
+                            >
                           </td>
-                          <td>{{ item.w_smtr }}</td>
+                          <td>
+                            <b>開課課程：</b>{{ item.w_cos_id }}&nbsp;-&nbsp;{{
+                              item.w_cos_class
+                            }}&nbsp;-&nbsp;{{ item.cos_cname }}<br /><b>學分數：</b
+                            >{{ item.cos_credit }}&nbsp;學分&nbsp;&nbsp;&nbsp;<b
+                              >開課教師：</b
+                            >{{ item.teacher_name }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
+                            >{{ item.tch_dept_no }}<br /><b>期中預警備註說明：</b
+                            >{{ item.w_memo }}<br /><span class="etc-content-text"
+                              >開課教師登錄日期：{{ item.ins_time }}</span
+                            ><br /><b
+                              ><span class="credit-text"
+                                >★&nbsp;本學期總修習學分數&nbsp;/&nbsp;總預警學分數：{{
+                                  item.w_std_total_credit
+                                }}&nbsp;/&nbsp;{{ item.w_std_total_credit }}</span
+                              ></b
+                            >
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -497,36 +522,45 @@ html[屬性樣式] {
   border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-300));
 }
 .bold {
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: bold;
 }
 td {
   font-size: 0.92rem;
-  line-height: 1.3;
+  line-height: 1.5;
   vertical-align: middle;
 }
 .table th:first-child,
 .table td:first-child {
-  width: 6%;
+  width: 10%;
 }
-.table th:second-child,
+/* .table th:second-child,
 .table td:second-child {
-  width: 1%;
-}
+  width: 0.5%;
+} */
 
 .table th:nth-child(2),
 .table td:nth-child(2) {
-  width: 15%;
+  width: 13%;
 }
 
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  width: 27%;
+  width: 28%;
 }
 
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 55%;
+  width: 50%;
+}
+.std-state-text {
+  color: #ff7809;
+}
+.credit-text {
+  color: #d40000;
+}
+.etc-content-text {
+  color: #808080;
 }
 .icon-address {
   font-size: 7px;
