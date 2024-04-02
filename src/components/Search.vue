@@ -356,6 +356,10 @@ export default {
       if (errorMessages) {
         alert(errorMessages);
       } else {
+        /* if (selectedDepartment.value == "國際服務產業管理學士學位學程")
+          selectedDepartment.value = 201;
+        else if (selectedDepartment.value == "護理學系") selectedDepartment.value = 304; */
+
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
           w_dept_no: selectedDepartment.value,
@@ -409,37 +413,14 @@ export default {
       } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
         errorMessages += "請選填學期\n";
       }
-      /* if (selectedCollege.value.trim() === "" || selectedDepartment.value.trim() === "") {
-        errorMessages += "請選擇院所及科系\n";
-      } */
 
       if (errorMessages) {
         alert(errorMessages);
       } else {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
-          advisor: "",
           w_dept_no: selectedDepartment.value,
-          w_degree: "",
           w_std_no: inputStudentID.value.trim(),
-          chi_name: "",
-          state: "",
-          w_cos_id: "",
-          w_cos_class: "",
-          cos_cname: "",
-          cos_credit: "",
-          teacher_name: "",
-          cos_year: "",
-          tch_dept_no: "",
-          cos_type: "",
-          w_memo: "",
-          ins_user: "",
-          ins_time: "",
-          ins_ip: "",
-          print_time: "",
-          address: "",
-          parent: "",
-          w_std_total_credit: "",
         };
 
         try {
@@ -458,95 +439,151 @@ export default {
           if (response && response.status === 200) {
             if (response.data && response.data.length > 0) {
               console.log("相符資料：", response.data);
-              console.log("To Excel Logic!");
-
-              const workbook = new ExcelJS.Workbook();
-              const worksheet = workbook.addWorksheet("Sheet 1");
-
-              // 標頭
-              worksheet.addRow([
-                "導師姓名",
-                "系所",
-                "年級",
-                "班別",
-                "學號",
-                "姓名",
-                "開課課程 - 課號",
-                "開課課程 - 班別",
-                "開課課程 - 學分數",
-                "開課教師",
-                "開課年級",
-                "教師所屬系所",
-                "必選修",
-                "期中預警備註說明",
-                "開課教師登錄日期",
-              ]);
-
-              response.data.forEach((rowData) => {
-                worksheet.addRow([
-                  rowData.advisor,
-                  rowData.w_dept_no,
-                  rowData.w_degree,
-                  rowData.w_std_no,
-                  rowData.chi_name,
-                  rowData.w_cos_id,
-                  rowData.w_cos_class,
-                  rowData.cos_cname,
-                  rowData.cos_credit,
-                  rowData.teacher_name,
-                  rowData.cos_year,
-                  rowData.tch_dept_no,
-                  rowData.cos_type,
-                  rowData.w_memo,
-                  rowData.ins_user,
-                  rowData.ins_time,
-                  rowData.print_time,
-                  rowData.address,
-                  rowData.parent,
-                ]);
-              });
-
-              // 自動調整欄寬
-              /* worksheet.columns.forEach((column) => {
-                  if (column.values) {
-                    column.width = Math.max(
-                      column.header.length,
-                      ...column.values.map((value) => (value ? value.toString().length : 0))
-                    );
-                  }
-                }); */
-
-              // 將工作簿轉為 Excel 文件
-              const blob = await workbook.xlsx.writeBuffer();
-              const url = URL.createObjectURL(
-                new Blob([blob], {
-                  type:
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                })
-              );
-
-              // 下載檔案連結
-              const link = document.createElement("a");
-              link.href = url;
-              link.download =
-                inputAcademicYear.value + inputSemester.value + "期末預警通知.xlsx";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
+              apiDataStore.setApiData(response.data);
+              // 呼叫函數 createExcelFromData 來生成 Excel
+              createExcelFromData(response.data);
             } else {
               console.log("無相符資料");
               alert("無相符資料");
             }
           } else {
-            console.log("搜尋失敗");
+            console.error("API 請求失敗:", response.statusText);
             alert("搜尋失敗，請稍後再試。");
           }
         } catch (error) {
           console.error("Error during API request:", error);
-          // 在這里處理錯誤
           alert("搜尋失敗，請稍後再試。");
         }
       }
+    };
+
+    const createExcelFromData = (data) => {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Sheet 1");
+
+      // 設置第一行文字為粗體且行高為20
+      const mergedCell1 = worksheet.getCell("A1:Q1");
+      mergedCell1.value = `【 ${inputAcademicYear.value} 學年第 ${inputSemester.value} 學期其中預警學生名單 】`;
+      mergedCell1.alignment = { vertical: "middle", horizontal: "left" };
+      mergedCell1.font = { bold: true }; // 設置粗體
+      worksheet.mergeCells("A1:P1");
+      worksheet.getRow(1).height = 20; // 設置行高為20
+      worksheet.getRow(1).alignment = { vertical: "middle" /* , horizontal: "center" */ }; // 垂直置中
+
+      // 添加第二行且行高為20
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getFullYear()}-${
+        currentDate.getMonth() + 1
+      }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
+      const mergedCell2 = worksheet.getCell("A2:Q2");
+      mergedCell2.value = ` 資料時間：${formattedDate}`;
+      mergedCell2.alignment = { vertical: "middle", horizontal: "left" }; // 將水平對齊方式設置為 "left"
+      mergedCell2.font = { bold: true }; // 設置粗體
+      worksheet.mergeCells("A2:P2");
+      worksheet.getRow(2).height = 20; // 設置行高為20
+      worksheet.getRow(2).alignment = { vertical: "middle" /* , horizontal: "center" */ }; // 垂直置中
+
+      // 添加表頭
+      const headerRow = worksheet.addRow([
+        "導師姓名",
+        "系所",
+        "年級",
+        "班別",
+        "學號",
+        "姓名",
+        "開課課程 - 課號",
+        "開課課程 - 班別",
+        "開課課程 - 名稱",
+        "開課課程 - 學分數",
+        "開課教師",
+        "開課年級",
+        "教師所屬系所",
+        "必選修",
+        "期中預警備註說明",
+        "開課教師登錄日期",
+      ]);
+
+      headerRow.height = 20;
+      headerRow.eachCell((cell) => {
+        cell.font = { bold: true };
+        cell.alignment = { vertical: "middle", horizontal: "center" }; // 垂直置中
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFF2CC" }, // 背景填滿色為#FFF2CC
+        };
+      });
+
+      // 添加資料行
+      data.forEach((rowData) => {
+        const row = worksheet.addRow([
+          rowData.advisor,
+          rowData.w_dept_no,
+          rowData.w_degree,
+          rowData.w_class,
+          rowData.w_std_no,
+          rowData.chi_name,
+          rowData.w_cos_id,
+          rowData.w_cos_class,
+          rowData.cos_cname,
+          rowData.cos_credit,
+          rowData.teacher_name,
+          rowData.cos_year,
+          rowData.tch_dept_no,
+          rowData.cos_type,
+          rowData.w_memo,
+          /* rowData.ins_user, */
+          rowData.ins_time,
+          /* rowData.print_time,
+          rowData.address,
+          rowData.parent, */
+        ]);
+
+        row.height = 20;
+        row.eachCell((cell) => {
+          cell.alignment = { vertical: "middle" }; // 垂直置中
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        });
+      });
+      worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+        row.eachCell({ includeEmpty: true }, function (cell, colNumber) {
+          if (rowNumber <= 2) {
+            // 第一、第二行
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          } else {
+            // 資料行
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          }
+        });
+      });
+
+      // 生成 Excel 文件
+      workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: "application/octet-stream" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "export.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
     };
 
     const buttonClear = async (event) => {

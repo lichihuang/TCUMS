@@ -59,11 +59,11 @@
                           </td>
                           <td>
                             <b
-                              >{{ item.w_dept_no }}&nbsp;{{ item.w_degree
+                              >{{ departmentName }}&nbsp;{{ item.w_degree
                               }}{{ item.w_class }}<br />
                               {{ item.w_std_no }}<br />{{ item.chi_name }}</b
                             ><br /><span class="std-state-text"
-                              ><b>狀態：{{ item.state }}</b></span
+                              ><b>狀態：{{ studentState }}</b></span
                             ><br /><span class="etc-content-text"
                               >★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />Date：{{
                                 item.ins_time
@@ -79,7 +79,7 @@
                             >{{ item.cos_credit }}&nbsp;學分&nbsp;&nbsp;&nbsp;<b
                               >開課教師：</b
                             >{{ item.teacher_name }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
-                            >{{ item.tch_dept_no }}<br /><b>期中預警備註說明：</b
+                            >{{ teacherDepartment }}<br /><b>期中預警備註說明：</b
                             >{{ item.w_memo }}<br /><span class="etc-content-text"
                               >開課教師登錄日期：{{ item.ins_time }}</span
                             ><br /><b
@@ -199,6 +199,111 @@ export default {
     const totalItems = computed(() => {
       const dataToCount = searchTerm.value ? filteredData.value : apiDataStore.getApiData;
       return dataToCount ? dataToCount.length : 0;
+    });
+
+    const deptName = {
+      201: "國際服務產業管理學士學位學程",
+      203: "國際數位媒體科技學士學位學程",
+      204: "外國語文學系",
+      235: "永續暨防災碩士學位學程",
+      300: "醫學院-大學部",
+      301: "醫學系",
+      302: "醫學檢驗生物技術學系",
+      303: "公共衛生學系",
+      304: "護理學系",
+      305: "醫學資訊學系",
+      307: "物理治療學系",
+      308: "學士後中醫學系",
+      309: "生物醫學暨工程學系",
+      321: "護理學系碩士班",
+      323: "醫學檢驗生物技術學系碩士班",
+      324: "公共衛生學系碩士班",
+      325: "醫學資訊學系碩士班",
+      331: "物理治療學系碩士班",
+      333: "生物醫學碩士班",
+      334: "臨床藥學研究所",
+      337: "生物醫學暨工程學系碩士班",
+      338: "學士後中醫學系碩士班",
+      353: "醫學科學博士班",
+      354: "轉役醫學博士學位學程",
+      398: "醫學院-碩士班",
+      500: "人文社會學院-大學部",
+      501: "社會工作學系",
+      502: "傳播學系",
+      506: "人類發展與心理學系",
+      521: "傳播學系碩士班",
+      522: "社會工作學系碩士班",
+      525: "東方語文學系碩士班",
+      526: "宗教與人文研究所",
+      532: "人類發展與心理學系碩士班臨床心理學組",
+      534: "東方語文學系中文組",
+      535: "東方語文學系日文組",
+      600: "國際暨跨領域學院-大學部",
+      610: "國際暨跨領域學院-碩士班",
+      622: "教育研究所碩士在職專班",
+      623: "護理學系碩士在職專班",
+      702: "分子生物暨人類遺傳學系",
+      721: "藥理暨毒理學碩士班",
+      727: "分子生物暨人類遺傳學系碩士班",
+      752: "藥理暨毒理學博士班",
+      800: "教育傳播學院-大學部",
+      801: "兒童發展與家庭教育學系",
+      821: "健康傳播專題研究",
+      831: "媒體製作暨教學中心",
+      901: "通識教育中心",
+      902: "體育教學中心",
+      922: "師資培育中心",
+      924: "外語教學中心",
+      931: "華語教材教法",
+      932: "社會工作學系碩士班",
+    };
+
+    // department name 轉換有誤
+    const departmentName = computed(() => {
+      const validData = paginatedData.value.find(
+        (item) => item && item.w_dept_no && deptName.hasOwnProperty(item.w_dept_no)
+      );
+      if (validData) {
+        return deptName[validData.w_dept_no];
+      }
+      return "未知系所";
+    });
+
+    // teacher's department name 轉換有誤
+    const teacherDepartment = computed(() => {
+      const validData = paginatedData.value.find(
+        (item) => item && item.tch_dept_no && deptName.hasOwnProperty(item.tch_dept_no)
+      );
+      if (validData) {
+        return deptName[validData.tch_dept_no];
+      }
+      return "未知系所";
+    });
+
+    const stdState = {
+      1: "在學",
+      2: "休學",
+      3: "退學",
+      4: "保留學籍",
+      5: "畢業",
+      7: "未入學",
+      9: "交換結束",
+      10: "放棄入學",
+      11: "撤銷學籍",
+      12: "先修結束",
+      13: "研修結束",
+      99: "不升級",
+    };
+
+    // student state 轉換有誤
+    const studentState = computed(() => {
+      const validData = paginatedData.value.find(
+        (item) => item && item.state && stdState.hasOwnProperty(item.state)
+      );
+      if (validData) {
+        return stdState[validData.state];
+      }
+      return "未知狀態";
     });
 
     const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
@@ -423,6 +528,9 @@ export default {
       buttonDeselect,
       filteredData,
       searchTerm,
+      departmentName,
+      teacherDepartment,
+      studentState,
     };
   },
 };
