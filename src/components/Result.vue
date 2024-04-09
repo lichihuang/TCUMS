@@ -57,38 +57,77 @@
                           <td class="text-center">
                             <input type="checkbox" v-model="printSelection[index]" />
                           </td>
-                          <td>
-                            <b
-                              >{{ departmentName }}&nbsp;{{ item.w_degree
-                              }}{{ item.w_class }}<br />
-                              {{ item.w_std_no }}<br />{{ item.chi_name }}</b
-                            ><br /><span class="std-state-text"
-                              ><b>狀態：{{ studentState }}</b></span
-                            ><br /><span class="etc-content-text"
-                              >★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />Date：{{
-                                item.ins_time
-                              }}<br />IP：{{ item.ins_ip }}<br />User：{{
-                                item.ins_user
-                              }}</span
-                            >
+                          <!-- <td v-if="item.warnings && item.warnings.length > 0">
+                            <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
+                              <b
+                                >{{ warning.department }}&nbsp;{{
+                                  item.studentId
+                                }}&nbsp;{{ warning.degree }}{{ warning.studentClass
+                                }}<br />{{ warning.studentName }}</b
+                              ><br />
+                              <span class="std-state-text"
+                                ><b>狀態：{{ warning.state }}</b></span
+                              ><br />
+                              <span class="etc-content-text">
+                                ★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />
+                                Date：{{ warning.insTime }}<br />
+                                IP：{{ warning.insIP }}<br />
+                                User：{{ warning.insUser }}
+                              </span>
+                            </div>
+                          </td> -->
+                          <td v-if="item.warnings && item.warnings.length > 0">
+                            <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
+                              <template v-if="wIndex === 0">
+                                <b
+                                  >{{ warning.department }}&nbsp;{{
+                                    item.studentId
+                                  }}&nbsp;{{ warning.degree }}{{ warning.studentClass
+                                  }}<br />{{ warning.studentName }}</b
+                                ><br />
+                                <span class="std-state-text"
+                                  ><b>狀態：{{ warning.state }}</b></span
+                                ><br />
+                                <span class="etc-content-text">
+                                  ★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />
+                                  Date：{{ warning.insTime }}<br />
+                                  IP：{{ warning.insIP }}<br />
+                                  User：{{ warning.insUser }}
+                                </span>
+                              </template>
+                            </div>
                           </td>
-                          <td>
-                            <b>開課課程：</b>{{ item.w_cos_id }}&nbsp;-&nbsp;{{
-                              item.w_cos_class
-                            }}&nbsp;-&nbsp;{{ item.cos_cname }}<br /><b>學分數：</b
-                            >{{ item.cos_credit }}&nbsp;學分&nbsp;&nbsp;&nbsp;<b
-                              >開課教師：</b
-                            >{{ item.teacher_name }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
-                            >{{ teacherDepartment }}<br /><b>期中預警備註說明：</b
-                            >{{ item.w_memo }}<br /><span class="etc-content-text"
-                              >開課教師登錄日期：{{ item.ins_time }}</span
-                            ><br /><b
+
+                          <td v-if="item.warnings && item.warnings.length > 0">
+                            <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
+                              <b>開課課程：</b>{{ warning.courseId }}&nbsp;-&nbsp;{{
+                                warning.class
+                              }}&nbsp;-&nbsp;{{ warning.courseName }}<br />
+                              <b>學分數：</b
+                              >{{ warning.credit }}&nbsp;學分&nbsp;&nbsp;&nbsp;<b
+                                >開課教師：</b
+                              >{{ warning.teacher }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
+                              >{{ warning.teacherDept }}<br />
+                              <b>期中預警備註說明：</b>{{ warning.memo }}<br />
+                              <span class="etc-content-text"
+                                >開課教師登錄日期：{{ warning.insTime }}</span
+                              ><br />
+                              <!-- 在最後一個警告的後面顯示 -->
+                              <hr v-if="wIndex < item.warnings.length - 1" />
+                            </div>
+                            <!-- 只在最後一筆警告後顯示 -->
+                            <b class="total-credit"
                               ><span class="credit-text"
                                 >★&nbsp;本學期總修習學分數&nbsp;/&nbsp;總預警學分數：{{
-                                  item.w_std_total_credit
-                                }}&nbsp;/&nbsp;{{ item.w_std_total_credit }}</span
+                                  item.warnings[item.warnings.length - 1].totalCredit
+                                }}&nbsp;/&nbsp;{{
+                                  item.warnings[item.warnings.length - 1].totalCredit
+                                }}</span
                               ></b
                             >
+                          </td>
+                          <td v-else>
+                            <!-- 如果沒有警告，顯示相應的內容 -->
                           </td>
                         </tr>
                       </tbody>
@@ -193,7 +232,7 @@ export default {
   },
   props: ["searchData"],
   setup(props) {
-    const pageOptions = [10, 25, 50, 75, 100];
+    const pageOptions = [5, 10, 25, 50, 75, 100];
     const currentPage = ref(1);
     const itemsPerPage = ref(10);
     const totalItems = computed(() => {
@@ -351,10 +390,10 @@ export default {
       currentPage.value = page;
     };
 
+    console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
+
     const paginatedData = computed(() => {
-      const dataToPaginate = searchTerm.value
-        ? filteredData.value
-        : apiDataStore.getApiData;
+      const dataToPaginate = searchTerm.value ? filteredData.value : apiData.value;
       if (!dataToPaginate) return [];
 
       const startIdx = (currentPage.value - 1) * itemsPerPage.value;
@@ -765,6 +804,9 @@ select {
 }
 .resultPage-btn {
   margin-left: auto;
+}
+.total-credit {
+  line-height: 2.5;
 }
 
 @media (min-width: 768px) {

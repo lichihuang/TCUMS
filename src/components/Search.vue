@@ -356,10 +356,6 @@ export default {
       if (errorMessages) {
         alert(errorMessages);
       } else {
-        /* if (selectedDepartment.value == "國際服務產業管理學士學位學程")
-          selectedDepartment.value = 201;
-        else if (selectedDepartment.value == "護理學系") selectedDepartment.value = 304; */
-
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
           w_dept_no: selectedDepartment.value,
@@ -368,7 +364,7 @@ export default {
 
         try {
           const response = await axios.post(
-            "http://localhost:5256/api/SemesterWarning/Search",
+            "http://localhost:5256/api/SemesterWarning/Combined", // 修改為正確的端點 URL
             requestData,
             {
               headers: {
