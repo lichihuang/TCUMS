@@ -248,13 +248,12 @@ export default {
     const inputSemester = ref("");
     const inputStudentID = ref("");
 
-    const semesterWarnings = ref([]); // 取到的Data
-
+    const semesterWarnings = ref([]);
     const apiDataStore = useApiDataStore();
 
     const store = createStore({
       state: () => ({
-        apiData: [], // 儲存API數據狀態
+        apiData: [],
       }),
 
       actions: {
@@ -421,7 +420,7 @@ export default {
 
         try {
           const response = await axios.post(
-            "http://localhost:5256/api/SemesterWarning/Search",
+            "http://localhost:5256/api/SemesterWarning/Combined", // 修改為正確的端點 URL
             requestData,
             {
               headers: {
@@ -436,7 +435,6 @@ export default {
             if (response.data && response.data.length > 0) {
               console.log("相符資料：", response.data);
               apiDataStore.setApiData(response.data);
-              // 呼叫函數 createExcelFromData 來生成 Excel
               createExcelFromData(response.data);
             } else {
               console.log("無相符資料");
@@ -457,16 +455,14 @@ export default {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Sheet 1");
 
-      // 設置第一行文字為粗體且行高為20
       const mergedCell1 = worksheet.getCell("A1:Q1");
       mergedCell1.value = `【 ${inputAcademicYear.value} 學年第 ${inputSemester.value} 學期其中預警學生名單 】`;
       mergedCell1.alignment = { vertical: "middle", horizontal: "left" };
-      mergedCell1.font = { bold: true }; // 設置粗體
+      mergedCell1.font = { bold: true };
       worksheet.mergeCells("A1:P1");
-      worksheet.getRow(1).height = 20; // 設置行高為20
-      worksheet.getRow(1).alignment = { vertical: "middle" /* , horizontal: "center" */ }; // 垂直置中
+      worksheet.getRow(1).height = 20;
+      worksheet.getRow(1).alignment = { vertical: "middle" };
 
-      // 添加第二行且行高為20
       const currentDate = new Date();
       const formattedDate = `${currentDate.getFullYear()}-${
         currentDate.getMonth() + 1
@@ -474,13 +470,12 @@ export default {
 
       const mergedCell2 = worksheet.getCell("A2:Q2");
       mergedCell2.value = ` 資料時間：${formattedDate}`;
-      mergedCell2.alignment = { vertical: "middle", horizontal: "left" }; // 將水平對齊方式設置為 "left"
-      mergedCell2.font = { bold: true }; // 設置粗體
+      mergedCell2.alignment = { vertical: "middle", horizontal: "left" };
+      mergedCell2.font = { bold: true };
       worksheet.mergeCells("A2:P2");
-      worksheet.getRow(2).height = 20; // 設置行高為20
-      worksheet.getRow(2).alignment = { vertical: "middle" /* , horizontal: "center" */ }; // 垂直置中
+      worksheet.getRow(2).height = 20;
+      worksheet.getRow(2).alignment = { vertical: "middle" };
 
-      // 添加表頭
       const headerRow = worksheet.addRow([
         "導師姓名",
         "系所",
@@ -503,54 +498,51 @@ export default {
       headerRow.height = 20;
       headerRow.eachCell((cell) => {
         cell.font = { bold: true };
-        cell.alignment = { vertical: "middle", horizontal: "center" }; // 垂直置中
+        cell.alignment = { vertical: "middle", horizontal: "center" };
         cell.fill = {
           type: "pattern",
           pattern: "solid",
-          fgColor: { argb: "FFF2CC" }, // 背景填滿色為#FFF2CC
+          fgColor: { argb: "FFF2CC" },
         };
       });
 
-      // 添加資料行
       data.forEach((rowData) => {
-        const row = worksheet.addRow([
-          rowData.advisor,
-          rowData.w_dept_no,
-          rowData.w_degree,
-          rowData.w_class,
-          rowData.w_std_no,
-          rowData.chi_name,
-          rowData.w_cos_id,
-          rowData.w_cos_class,
-          rowData.cos_cname,
-          rowData.cos_credit,
-          rowData.teacher_name,
-          rowData.cos_year,
-          rowData.tch_dept_no,
-          rowData.cos_type,
-          rowData.w_memo,
-          /* rowData.ins_user, */
-          rowData.ins_time,
-          /* rowData.print_time,
-          rowData.address,
-          rowData.parent, */
-        ]);
+        rowData.warnings.forEach((warning) => {
+          const row = worksheet.addRow([
+            warning.advisor,
+            warning.department,
+            warning.degree,
+            warning.studentClass,
+            rowData.studentId,
+            warning.studentName,
+            warning.courseId,
+            warning.class,
+            warning.courseName,
+            warning.credit,
+            warning.teacher,
+            warning.cos_year,
+            warning.teacherDept,
+            warning.courseType,
+            warning.memo,
+            warning.insTime,
+          ]);
 
-        row.height = 20;
-        row.eachCell((cell) => {
-          cell.alignment = { vertical: "middle" }; // 垂直置中
-          cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-          };
+          row.height = 20;
+          row.eachCell((cell) => {
+            cell.alignment = { vertical: "middle" };
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          });
         });
       });
+
       worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
         row.eachCell({ includeEmpty: true }, function (cell, colNumber) {
           if (rowNumber <= 2) {
-            // 第一、第二行
             cell.border = {
               top: { style: "thin" },
               left: { style: "thin" },
@@ -558,7 +550,6 @@ export default {
               right: { style: "thin" },
             };
           } else {
-            // 資料行
             cell.border = {
               top: { style: "thin" },
               left: { style: "thin" },
@@ -569,7 +560,6 @@ export default {
         });
       });
 
-      // 生成 Excel 文件
       workbook.xlsx.writeBuffer().then((buffer) => {
         const blob = new Blob([buffer], { type: "application/octet-stream" });
         const url = window.URL.createObjectURL(blob);
