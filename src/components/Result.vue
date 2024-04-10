@@ -59,7 +59,13 @@
                           </td>
                           <td v-if="item.warnings && item.warnings.length > 0">
                             <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
-                              <template v-if="item.warnings && item.warnings.length > 0">
+                              <template
+                                v-if="
+                                  item.warnings &&
+                                  item.warnings.length > 0 &&
+                                  wIndex === 0
+                                "
+                              >
                                 <b
                                   >{{ departmentName[index] }}&nbsp;{{ warning.degree
                                   }}{{ warning.studentClass }}<br />{{ item.studentId
@@ -70,7 +76,7 @@
                                 ><br />
                                 <span class="etc-content-text">
                                   ★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />
-                                  Date：{{ warning.insTime }}<br />
+                                  Date：{{ formatDate(warning.insTime) }}<br />
                                   IP：{{ warning.insIP }}<br />
                                   User：{{ warning.insUser }}
                                 </span>
@@ -90,7 +96,7 @@
                               >{{ teacherDepartment[index] }}<br />
                               <b>期中預警備註說明：</b>{{ warning.memo }}<br />
                               <span class="etc-content-text"
-                                >開課教師登錄日期：{{ warning.insTime }}</span
+                                >開課教師登錄日期：{{ formatDate(warning.insTime) }}</span
                               ><br />
                               <hr v-if="wIndex < item.warnings.length - 1" />
                             </div>
@@ -216,6 +222,17 @@ export default {
       return dataToCount ? dataToCount.length : 0;
     });
 
+    const formatDate = (timeString) => {
+      const date = new Date(timeString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+      return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+    };
+
     const deptName = {
       201: "國際服務產業管理學士學位學程",
       203: "國際數位媒體科技學士學位學程",
@@ -318,13 +335,12 @@ export default {
       const result = [];
       for (const item of paginatedData.value) {
         for (const warning of item.warnings) {
-          // 檢查 warning.state 是否存在且不是空值
           if (warning.state != null && stdState.hasOwnProperty(warning.state)) {
             result.push(stdState[warning.state]);
           } else {
-            result.push(""); // 如果是空值，將空字串添加到結果中
+            result.push("");
           }
-          break; // 停止迴圈，只處理第一個 warning
+          break;
         }
       }
       return result;
@@ -555,6 +571,7 @@ export default {
       departmentName,
       teacherDepartment,
       studentState,
+      formatDate,
     };
   },
 };
