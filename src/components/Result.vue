@@ -57,36 +57,16 @@
                           <td class="text-center">
                             <input type="checkbox" v-model="printSelection[index]" />
                           </td>
-                          <!-- <td v-if="item.warnings && item.warnings.length > 0">
-                            <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
-                              <b
-                                >{{ warning.department }}&nbsp;{{
-                                  item.studentId
-                                }}&nbsp;{{ warning.degree }}{{ warning.studentClass
-                                }}<br />{{ warning.studentName }}</b
-                              ><br />
-                              <span class="std-state-text"
-                                ><b>狀態：{{ warning.state }}</b></span
-                              ><br />
-                              <span class="etc-content-text">
-                                ★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />
-                                Date：{{ warning.insTime }}<br />
-                                IP：{{ warning.insIP }}<br />
-                                User：{{ warning.insUser }}
-                              </span>
-                            </div>
-                          </td> -->
                           <td v-if="item.warnings && item.warnings.length > 0">
                             <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
-                              <template v-if="wIndex === 0">
+                              <template v-if="item.warnings && item.warnings.length > 0">
                                 <b
-                                  >{{ warning.department }}&nbsp;{{
-                                    item.studentId
-                                  }}&nbsp;{{ warning.degree }}{{ warning.studentClass
+                                  >{{ departmentName[index] }}&nbsp;{{ warning.degree
+                                  }}{{ warning.studentClass }}<br />{{ item.studentId
                                   }}<br />{{ warning.studentName }}</b
                                 ><br />
                                 <span class="std-state-text"
-                                  ><b>狀態：{{ warning.state }}</b></span
+                                  ><b>狀態：{{ studentState[index] }}</b></span
                                 ><br />
                                 <span class="etc-content-text">
                                   ★&nbsp;最近一次預覽列印紀錄&nbsp;★<br />
@@ -107,15 +87,13 @@
                               >{{ warning.credit }}&nbsp;學分&nbsp;&nbsp;&nbsp;<b
                                 >開課教師：</b
                               >{{ warning.teacher }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
-                              >{{ warning.teacherDept }}<br />
+                              >{{ teacherDepartment[index] }}<br />
                               <b>期中預警備註說明：</b>{{ warning.memo }}<br />
                               <span class="etc-content-text"
                                 >開課教師登錄日期：{{ warning.insTime }}</span
                               ><br />
-                              <!-- 在最後一個警告的後面顯示 -->
                               <hr v-if="wIndex < item.warnings.length - 1" />
                             </div>
-                            <!-- 只在最後一筆警告後顯示 -->
                             <b class="total-credit"
                               ><span class="credit-text"
                                 >★&nbsp;本學期總修習學分數&nbsp;/&nbsp;總預警學分數：{{
@@ -126,9 +104,7 @@
                               ></b
                             >
                           </td>
-                          <td v-else>
-                            <!-- 如果沒有警告，顯示相應的內容 -->
-                          </td>
+                          <td v-else></td>
                         </tr>
                       </tbody>
                     </table>
@@ -297,36 +273,40 @@ export default {
       932: "社會工作學系碩士班",
     };
 
-    // department name 轉換有誤
     const departmentName = computed(() => {
-      const validData = paginatedData.value.find(
-        (item) => item && item.w_dept_no && deptName.hasOwnProperty(item.w_dept_no)
-      );
-      if (validData) {
-        return deptName[validData.w_dept_no];
+      const result = [];
+      for (const item of paginatedData.value) {
+        for (const warning of item.warnings) {
+          if (warning.department && deptName.hasOwnProperty(warning.department)) {
+            result.push(deptName[warning.department]);
+            break;
+          }
+        }
       }
-      return "未知系所";
+      return result;
     });
 
-    // teacher's department name 轉換有誤
     const teacherDepartment = computed(() => {
-      const validData = paginatedData.value.find(
-        (item) => item && item.tch_dept_no && deptName.hasOwnProperty(item.tch_dept_no)
-      );
-      if (validData) {
-        return deptName[validData.tch_dept_no];
+      const result = [];
+      for (const item of paginatedData.value) {
+        for (const warning of item.warnings) {
+          if (warning.teacherDept && deptName.hasOwnProperty(warning.teacherDept)) {
+            result.push(deptName[warning.teacherDept]);
+            break;
+          }
+        }
       }
-      return "未知系所";
+      return result;
     });
 
     const stdState = {
-      1: "在學",
-      2: "休學",
-      3: "退學",
-      4: "保留學籍",
-      5: "畢業",
-      7: "未入學",
-      9: "交換結束",
+      "01": "在學",
+      "02": "休學",
+      "03": "退學",
+      "04": "保留學籍",
+      "05": "畢業",
+      "07": "未入學",
+      "09": "交換結束",
       10: "放棄入學",
       11: "撤銷學籍",
       12: "先修結束",
@@ -334,15 +314,20 @@ export default {
       99: "不升級",
     };
 
-    // student state 轉換有誤
     const studentState = computed(() => {
-      const validData = paginatedData.value.find(
-        (item) => item && item.state && stdState.hasOwnProperty(item.state)
-      );
-      if (validData) {
-        return stdState[validData.state];
+      const result = [];
+      for (const item of paginatedData.value) {
+        for (const warning of item.warnings) {
+          // 檢查 warning.state 是否存在且不是空值
+          if (warning.state != null && stdState.hasOwnProperty(warning.state)) {
+            result.push(stdState[warning.state]);
+          } else {
+            result.push(""); // 如果是空值，將空字串添加到結果中
+          }
+          break; // 停止迴圈，只處理第一個 warning
+        }
       }
-      return "未知狀態";
+      return result;
     });
 
     const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
@@ -681,10 +666,6 @@ td {
 .table td:first-child {
   width: 10%;
 }
-/* .table th:second-child,
-.table td:second-child {
-  width: 0.5%;
-} */
 
 .table th:nth-child(2),
 .table td:nth-child(2) {
@@ -693,12 +674,12 @@ td {
 
 .table th:nth-child(3),
 .table td:nth-child(3) {
-  width: 28%;
+  width: 30%;
 }
 
 .table th:nth-child(4),
 .table td:nth-child(4) {
-  width: 50%;
+  width: 47%;
 }
 .std-state-text {
   color: #ff7809;
