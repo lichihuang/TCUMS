@@ -377,6 +377,8 @@ export default {
           if (response && response.status === 200) {
             if (response.data && response.data.length > 0) {
               console.log("相符資料：", response.data);
+              response.data.inputAcademicYear = inputAcademicYear.value;
+              response.data.inputSemester = inputSemester.value;
               apiDataStore.setApiData(response.data);
               await router.push({ name: "ResultMain" });
             } else {

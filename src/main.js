@@ -3,6 +3,7 @@ import App from './App.vue';
 import SearchMain from "./views/SearchMain.vue"
 import ResultMain from "./views/ResultMain.vue"
 import router from './router';
+import Print from 'vue3-print-nb'
 
 import axios from './axios/axios'
 
@@ -20,5 +21,6 @@ app.component('ResultMain', ResultMain); // 注冊 ResultMian 組件
 app.use(router);
 app.mount('#app'); 
 app.use(createPinia());
+app.use(Print)
 
 app.config.globalProperties.$axios = axios;

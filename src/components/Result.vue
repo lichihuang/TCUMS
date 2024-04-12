@@ -153,20 +153,16 @@
                   >
                     &lt;
                   </button>
-                  <button
-                    class="pagination-button"
-                    @click="nextPage"
-                    :disabled="currentPage === totalPages"
-                  >
-                    &gt;
-                  </button>
+                  <div v-if="showPrintContent">
+                    <PrintContent ref="contentToPrint" />
+                  </div>
                   <div class="resultPage-btn">
                     <button
-                      @click="buttonPrint"
+                      @click="printContent"
                       class="btn-style w-10 btn btn-primary btn-md"
                       type="button"
                     >
-                      列印
+                      列印 & PDF
                     </button>
                     <button
                       @click="buttonSelectAll"
@@ -202,6 +198,8 @@ import { useRoute } from "vue-router";
 import { useApiDataStore } from "../store/apiDataStore";
 import CopyrightNotice from "../components/CopyrightNotice.vue";
 import PageController from "../components/PageController.vue";
+import PrintContent from "./PrintContent.vue";
+import print from "vue3-print-nb";
 
 import { Input, initMDB } from "mdb-ui-kit";
 initMDB({ Input });
@@ -211,7 +209,9 @@ export default {
   components: {
     CopyrightNotice,
     PageController,
+    PrintContent,
   },
+  directives: { print },
   props: ["searchData"],
   setup(props) {
     const pageOptions = [5, 10, 25, 50, 75, 100];
@@ -505,31 +505,20 @@ export default {
       }
     };
 
-    const buttonPrint = ref(null);
+    const showPrintContent = ref(false);
 
-    // 點擊列印按鈕時觸發的函式
-    const handlePrint = () => {
-      const selectedDataIndices = printSelection.value.reduce((acc, selected, index) => {
-        if (selected) {
-          acc.push(index); // 記錄被選取之資料Index
-        }
-        return acc;
-      }, []);
-
-      const selectedData = selectedDataIndices.map((index) => apiData.value[index]); // 取得被選取的資料
-
-      // 列印被選取資料
-      selectedData.forEach((data) => {
-        console.log(formatData(data));
-      });
+    const printContent = async () => {
+      console.log("Print！");
+      console.log(printSelection.value);
+      showPrintContent.value = true;
+      setTimeout(() => {
+        let newWin = window.open("", "_blank");
+        newWin.document.write(document.getElementById("printableContent").innerHTML);
+        newWin.document.close();
+        newWin.print();
+        showPrintContent.value = false;
+      }, 1000); // 延遲一秒以確保內容正確渲染
     };
-
-    // 将資料填入指定的格式中的函式
-    const formatData = (data) => {
-      // 將資料轉換為所需格式
-      return `${data.name}: ${data.value}`;
-    };
-
     const buttonSelectAll = () => {
       console.log("SelectAll");
       selectAll.value = true;
@@ -555,23 +544,25 @@ export default {
       printSelection,
       filteredPages,
       isInputFocused,
-      changePageSize,
-      goToPage,
-      getSerialNumber,
-      prevPage,
-      nextPage,
       startIndex,
       endIndex,
-      handleSearch,
-      buttonPrint,
-      buttonSelectAll,
-      buttonDeselect,
       filteredData,
       searchTerm,
       departmentName,
       teacherDepartment,
       studentState,
+      changePageSize,
+      goToPage,
+      getSerialNumber,
+      prevPage,
+      nextPage,
+      handleSearch,
+      printContent,
+      buttonSelectAll,
+      buttonDeselect,
       formatDate,
+      showPrintContent,
+      printContent,
     };
   },
 };
