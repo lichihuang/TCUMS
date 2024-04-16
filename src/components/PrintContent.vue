@@ -1,42 +1,71 @@
 <template>
-  <div class="print-content">
+  <div class="printContent">
     <div class="section1">
       <p>【 限時專送 】</p>
-      <p>{{ selectedData.address }}</p>
-      <p>{{ selectedData.parent }}</p>
+      <p v-if="selectedData && selectedData.address">{{ selectedData.address }}</p>
+      <p v-if="selectedData && selectedData.parent">{{ selectedData.parent }}</p>
       <p>
-        {{ selectedData.department }}&nbsp;-&nbsp;{{ selectedData.degree }}&nbsp;-&nbsp;{{
+        <span v-if="selectedData && selectedData.department">{{
+          selectedData.department
+        }}</span
+        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.degree">{{
+          selectedData.degree
+        }}</span
+        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentClass">{{
           selectedData.studentClass
-        }}&nbsp;-&nbsp;{{ selectedData.studentId }}<br />{{
+        }}</span
+        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentId">{{
+          selectedData.studentId
+        }}</span
+        ><br /><span v-if="selectedData && electedData.studentName">{{
           selectedData.studentName
-        }}&nbsp;同學
+        }}</span
+        >&nbsp;同學
       </p>
     </div>
     <div class="section2">
       <div>
-        <p>{{ selectedData.parent }}家長，您好</p>
+        <p v-if="selectedData && selectedData.parent">
+          {{ selectedData.parent }}家長，您好
+        </p>
         <p>
           貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
-          <b><i>若有相關問題請與學系導師聯繫</i></b
-          >。謝謝！
+          <b>若有相關問題請與學系導師聯繫</b>。謝謝！
         </p>
         <p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p>
       </div>
       <div>
         <p>
           <b
-            >{{ selectedData.inputAcademicYear }}學年度第{{
+            ><span v-if="selectedData && selectedData.inputAcademicYear">{{
+              selectedData.inputAcademicYear
+            }}</span
+            >學年度第<span v-if="selectedData && selectedData.inputSemester">{{
               selectedData.inputSemester
-            }}學期期中考試預警通知</b
+            }}</span
+            >學期期中考試預警通知</b
           >
         </p>
         <p>列印日期：{{ currentDate }}</p>
         <p>
-          班級：{{ departmentName }}{{ selectedData.degree }}年{{
+          班級：<span v-if="selectedData && selectedData.department">{{
+            departmentName
+          }}</span
+          ><span v-if="selectedData && selectedData.degree">{{
+            selectedData.degree
+          }}</span
+          >年<span v-if="selectedData && selectedData.studentClass">{{
             selectedData.studentClass
-          }}班<br />
-          學號：{{ selectedData.studentId }}<br />
-          姓名：{{ selectedData.studentName }}<br />
+          }}</span
+          >班<br />
+          學號：<span v-if="selectedData && selectedData.studentId">{{
+            selectedData.studentId
+          }}</span
+          ><br />
+          姓名：<span v-if="selectedData && selectedData.studentName">{{
+            selectedData.studentName
+          }}</span
+          ><br />
         </p>
       </div>
       <div>
@@ -47,17 +76,31 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ selectedData.courseName }}</td>
-              <td>{{ selectedData.credit }}學分</td>
+              <td v-if="selectedData && selectedData.courseName">
+                {{ selectedData.courseName }}
+              </td>
+              <td v-if="selectedData && selectedData.credit">
+                {{ selectedData.credit }}學分
+              </td>
             </tr>
             <tr>
               <!--學生之預警課程學分數-->
-              <b>預警課程學分數合計：{{ selectedData.totalCredit }}學分</b>
+              <b
+                >預警課程學分數合計：<span
+                  v-if="selectedData && selectedData.totalCredit"
+                  >{{ selectedData.totalCredit }}</span
+                >學分</b
+              >
             </tr>
           </tbody>
         </table>
         <p>
-          <b>※&nbsp;本學期總修習學分數：{{ selectedData.totalCredit }}學分</b>
+          <b
+            >※&nbsp;本學期總修習學分數：<span
+              v-if="selectedData && selectedData.totalCredit"
+              >{{ selectedData.totalCredit }}</span
+            >學分</b
+          >
         </p>
       </div>
     </div>
@@ -148,6 +191,7 @@ export default {
       924: "外語教學中心",
       931: "華語教材教法",
       932: "社會工作學系碩士班",
+      "": "未知科系",
     };
 
     const departmentName = computed(() => {

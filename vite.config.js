@@ -6,5 +6,11 @@ export default defineConfig({
   css: {
     devSourcemap: true,
   },
-  plugins: [vue()],
+  plugins: [vue({
+    template: {
+      compilerOptions: {
+        isCustomElement: tag => tag.startsWith('lord-icon')
+      }
+    }
+  })],
 })

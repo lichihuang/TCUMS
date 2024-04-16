@@ -509,7 +509,7 @@ export default {
 
     const printContent = async () => {
       console.log("Print！");
-      console.log(printSelection.value);
+      console.log("printSelection：", printSelection.value);
       showPrintContent.value = true;
       setTimeout(() => {
         let newWin = window.open("", "_blank");
@@ -517,7 +517,7 @@ export default {
         newWin.document.close();
         newWin.print();
         showPrintContent.value = false;
-      }, 1000); // 延遲一秒以確保內容正確渲染
+      }, 1000);
     };
     const buttonSelectAll = () => {
       console.log("SelectAll");
