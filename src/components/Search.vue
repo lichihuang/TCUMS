@@ -182,11 +182,12 @@
                 <div class="col-3 btn-box"></div>
               </div>
 
-              <hr class="my-4" />
+              <hr class="my-4 instructions-block" />
               <div class="bd-callout bd-callout-warning">
                 <div class="row">
                   <div class="col-md-2">
-                    <h5 class="h5 mb-4">&nbsp;&nbsp;列印說明</h5>
+                    <!-- <h5 class="h5 mb-4">&nbsp;&nbsp;列印說明</h5> -->
+                    <label class="instructions-header">&nbsp;&nbsp;列印說明</label>
                   </div>
                   <div class="col-md-12">
                     <div class="row">
@@ -198,11 +199,15 @@
                           <li>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;列印注意事項：
                             <ul class="list-content-unstyled">
-                              <li>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;IE的檔案：設定列印格式，將頁首、頁尾值清空，設為A4直印，同時上下左右邊界設定為10。
+                              <li class="custom-line-height">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Chrome：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定目的地：列印&nbsp;⭢&nbsp;<b
+                                  >MicroSoft Print to PDF</b
+                                >；下載PDF&nbsp;⭢&nbsp;<b>另存為PDF</b>。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「顯示更多設定」：紙張大小設為<b>A4</b>，邊界及縮放比例皆設為<b>預設</b>。
                               </li>
-                              <li>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;IE的工具：網際網路選項-進階-列印，勾選列印背景的彩色及影像。
+                              <li class="custom-line-height">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Edge：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定印表機：列印&nbsp;⭢&nbsp;<b
+                                  >MicroSoft Print to PDF</b
+                                >；下載PDF&nbsp;⭢&nbsp;<b>另存新檔為PDF</b>。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「其他設定」：紙張大小設為<b>A4</b>，比例設為<b>實際大小</b>，邊界設為<b>預設值</b>。
                               </li>
                             </ul>
                           </li>
@@ -682,6 +687,7 @@ html[屬性樣式] {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: -3.9%;
 }
 .btn-style {
   background-color: #4682b4;
@@ -695,6 +701,7 @@ html[屬性樣式] {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1.7%;
 }
 .icon-address {
   font-size: 7px;
@@ -721,13 +728,19 @@ html[屬性樣式] {
   text-align: left;
   line-height: 1.5;
   font-size: 1rem;
-  line-height: 1.8;
+  margin-top: 6px;
 }
 .list-content-unstyled {
   list-style-type: none;
   text-align: left;
   line-height: 1.8;
   margin-left: -2%;
+}
+.custom-line-height {
+  line-height: 1.5;
+}
+.instructions-header {
+  font-size: 1.3rem;
 }
 
 @media (min-width: 768px) {
