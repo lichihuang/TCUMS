@@ -7,10 +7,9 @@
         </div>
         <div class="s1-address">
           <b
-            ><lablel v-if="selectedData && selectedData.address">{{
+            ><label v-if="selectedData && selectedData.address">{{
               selectedData.address
-            }}</lablel
-            ><label>花蓮市中山路一段3巷190號<br />洪爸爸 收</label>
+            }}</label>
             <p v-if="selectedData && selectedData.parent">
               {{ selectedData.parent }}&nbsp;先生&nbsp;/&nbsp;女士&nbsp;收
             </p></b
@@ -18,7 +17,7 @@
         </div>
       </div>
       <div class="s1-std">
-        <lablel>
+        <label>
           <span v-if="selectedData && selectedData.department">{{
             selectedData.department
           }}</span
@@ -35,18 +34,18 @@
             selectedData.studentName
           }}</span
           >&nbsp;同學
-        </lablel>
+        </label>
       </div>
     </div>
     <div class="section2">
       <div class="s2-content">
         <div class="s2-text">
-          <lablel v-if="selectedData && selectedData.parent">
+          <label v-if="selectedData && selectedData.parent">
             {{ selectedData.parent }}家長，您好
-          </lablel>
-          <lablel>
+          </label>
+          <label>
             貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
-            <b>若有相關問題請與學系導師聯繫</b>。謝謝！ </lablel
+            <b>若有相關問題請與學系導師聯繫</b>。謝謝！ </label
           ><br />
           <div class="some-content"><p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p></div>
 
@@ -65,7 +64,7 @@
           </div>
           <br />
           <div class="some-content">
-            <lablel>列印日期：{{ currentDate }}</lablel
+            <label>列印日期：{{ currentDate }}</label
             ><br />
           </div>
         </div>
@@ -142,6 +141,7 @@ export default {
     const currentDate = ref("");
 
     onMounted(() => {
+      window.print();
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1)
         .toString()

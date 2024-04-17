@@ -382,12 +382,17 @@ export default {
     }
 
     onMounted(async () => {
-      const router = useRouter();
-      const semester = router.params.semester;
+      /* const semester = router.params.semester;
       const year = router.params.year;
 
       if (semester && year) {
         resultTitle.value = `${year}學年第${semester}學期期中預警學生`;
+      } */
+      if (router.params) {
+        const { semester, year } = router.params;
+        if (semester && year) {
+          resultTitle.value = `${year}學年第${semester}學期期中預警學生`;
+        }
       }
     });
 
@@ -516,6 +521,8 @@ export default {
     const showPrintContent = ref(false);
 
     const handlePrint = async () => {
+      console.log("Print！");
+      console.log("printSelection：", printSelection.value);
       /* console.log("Print！");
       console.log("printSelection：", printSelection.value);
 
