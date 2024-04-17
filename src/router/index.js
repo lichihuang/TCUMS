@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import SearchMain from '../views/SearchMain.vue';
 import ResultMain from '../views/ResultMain.vue';
+import PrintContent from "../components/PrintContent.vue";
+
 const routes = [
   {
     path: '/',
@@ -16,6 +18,11 @@ const routes = [
     path: '/ResultMain',
     name: 'ResultMain',
     component: ResultMain,
+  },
+  {
+    path: '/PrintContent',
+    name: 'PrintContent',
+    component: PrintContent,
   },
 ];
 

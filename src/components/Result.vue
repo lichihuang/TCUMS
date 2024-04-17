@@ -153,12 +153,19 @@
                   >
                     &lt;
                   </button>
+                  <button
+                    class="pagination-button"
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                  >
+                    &gt;
+                  </button>
                   <div v-if="showPrintContent">
                     <PrintContent ref="contentToPrint" />
                   </div>
                   <div class="resultPage-btn">
                     <button
-                      @click="printContent"
+                      @click="handlePrint"
                       class="btn-style w-10 btn btn-primary btn-md"
                       type="button"
                     >
@@ -194,7 +201,7 @@
 
 <script>
 import { ref, computed, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useApiDataStore } from "../store/apiDataStore";
 import CopyrightNotice from "../components/CopyrightNotice.vue";
 import PageController from "../components/PageController.vue";
@@ -214,6 +221,7 @@ export default {
   directives: { print },
   props: ["searchData"],
   setup(props) {
+    const router = useRouter();
     const pageOptions = [5, 10, 25, 50, 75, 100];
     const currentPage = ref(1);
     const itemsPerPage = ref(10);
@@ -374,9 +382,9 @@ export default {
     }
 
     onMounted(async () => {
-      const route = useRoute();
-      const semester = route.params.semester;
-      const year = route.params.year;
+      const router = useRouter();
+      const semester = router.params.semester;
+      const year = router.params.year;
 
       if (semester && year) {
         resultTitle.value = `${year}學年第${semester}學期期中預警學生`;
@@ -507,22 +515,39 @@ export default {
 
     const showPrintContent = ref(false);
 
-    const printContent = async () => {
-      console.log("Print！");
+    const handlePrint = async () => {
+      /* console.log("Print！");
       console.log("printSelection：", printSelection.value);
+
+      const printableContent = document.querySelector(".printContent");
+      if (!printableContent) {
+        console.error("找不到具有 class 為 'printContent' 的元素。");
+        return;
+      }
+
       showPrintContent.value = true;
       setTimeout(() => {
         let newWin = window.open("", "_blank");
-        newWin.document.write(document.getElementById("printableContent").innerHTML);
-        newWin.document.close();
-        newWin.print();
+        if (printableContent.innerHTML) {
+          newWin.document.write(printableContent.innerHTML);
+          newWin.document.close();
+          newWin.print();
+        } else {
+          console.error("printableContent 內容為空。");
+        }
         showPrintContent.value = false;
-      }, 1000);
+      }, 1000); */
+      await router.push({ name: "PrintContent" });
     };
+
     const buttonSelectAll = () => {
       console.log("SelectAll");
       selectAll.value = true;
-      printSelection.value = Array(apiData.value.length).fill(true);
+      //printSelection.value = Array(apiData.value.length).fill(true);
+      printSelection.value = Array.from(
+        { length: apiDataStore.value.length },
+        () => true
+      );
       console.log(printSelection.value);
     };
 
@@ -551,18 +576,17 @@ export default {
       departmentName,
       teacherDepartment,
       studentState,
+      showPrintContent,
       changePageSize,
       goToPage,
       getSerialNumber,
       prevPage,
       nextPage,
       handleSearch,
-      printContent,
+      handlePrint,
       buttonSelectAll,
       buttonDeselect,
       formatDate,
-      showPrintContent,
-      printContent,
     };
   },
 };

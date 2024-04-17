@@ -1,53 +1,75 @@
 <template>
-  <div class="printContent">
+  <div class="print-content">
     <div class="section1">
-      <p>【 限時專送 】</p>
-      <p v-if="selectedData && selectedData.address">{{ selectedData.address }}</p>
-      <p v-if="selectedData && selectedData.parent">{{ selectedData.parent }}</p>
-      <p>
-        <span v-if="selectedData && selectedData.department">{{
-          selectedData.department
-        }}</span
-        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.degree">{{
-          selectedData.degree
-        }}</span
-        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentClass">{{
-          selectedData.studentClass
-        }}</span
-        >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentId">{{
-          selectedData.studentId
-        }}</span
-        ><br /><span v-if="selectedData && electedData.studentName">{{
-          selectedData.studentName
-        }}</span
-        >&nbsp;同學
-      </p>
+      <div class="s1-1">
+        <div class="some-content">
+          <p><b>【 限時專送 】</b></p>
+        </div>
+        <div class="s1-address">
+          <b
+            ><lablel v-if="selectedData && selectedData.address">{{
+              selectedData.address
+            }}</lablel
+            ><label>花蓮市中山路一段3巷190號<br />洪爸爸 收</label>
+            <p v-if="selectedData && selectedData.parent">
+              {{ selectedData.parent }}&nbsp;先生&nbsp;/&nbsp;女士&nbsp;收
+            </p></b
+          >
+        </div>
+      </div>
+      <div class="s1-std">
+        <lablel>
+          <span v-if="selectedData && selectedData.department">{{
+            selectedData.department
+          }}</span
+          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.degree">{{
+            selectedData.degree
+          }}</span
+          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentClass">{{
+            selectedData.studentClass
+          }}</span
+          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentId">{{
+            selectedData.studentId
+          }}</span
+          ><br /><span v-if="selectedData && electedData.studentName">{{
+            selectedData.studentName
+          }}</span
+          >&nbsp;同學
+        </lablel>
+      </div>
     </div>
     <div class="section2">
-      <div>
-        <p v-if="selectedData && selectedData.parent">
-          {{ selectedData.parent }}家長，您好
-        </p>
-        <p>
-          貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
-          <b>若有相關問題請與學系導師聯繫</b>。謝謝！
-        </p>
-        <p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p>
-      </div>
-      <div>
-        <p>
-          <b
-            ><span v-if="selectedData && selectedData.inputAcademicYear">{{
-              selectedData.inputAcademicYear
-            }}</span
-            >學年度第<span v-if="selectedData && selectedData.inputSemester">{{
-              selectedData.inputSemester
-            }}</span
-            >學期期中考試預警通知</b
-          >
-        </p>
-        <p>列印日期：{{ currentDate }}</p>
-        <p>
+      <div class="s2-content">
+        <div class="s2-text">
+          <lablel v-if="selectedData && selectedData.parent">
+            {{ selectedData.parent }}家長，您好
+          </lablel>
+          <lablel>
+            貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
+            <b>若有相關問題請與學系導師聯繫</b>。謝謝！ </lablel
+          ><br />
+          <div class="some-content"><p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p></div>
+
+          <div class="header">
+            <label>
+              <b
+                ><span v-if="selectedData && selectedData.inputAcademicYear">{{
+                  selectedData.inputAcademicYear
+                }}</span
+                >學年度第<span v-if="selectedData && selectedData.inputSemester">{{
+                  selectedData.inputSemester
+                }}</span
+                >學期期中考試預警通知</b
+              >
+            </label>
+          </div>
+          <br />
+          <div class="some-content">
+            <lablel>列印日期：{{ currentDate }}</lablel
+            ><br />
+          </div>
+        </div>
+        <label>
           班級：<span v-if="selectedData && selectedData.department">{{
             departmentName
           }}</span
@@ -64,13 +86,12 @@
           ><br />
           姓名：<span v-if="selectedData && selectedData.studentName">{{
             selectedData.studentName
-          }}</span
-          ><br />
-        </p>
+          }}</span>
+        </label>
       </div>
       <div>
-        <table>
-          <thead>
+        <table class="course-table">
+          <thead class="table-header">
             <th><b>課程名稱</b></th>
             <th><b>學分數</b></th>
           </thead>
@@ -84,13 +105,14 @@
               </td>
             </tr>
             <tr>
-              <!--學生之預警課程學分數-->
-              <b
-                >預警課程學分數合計：<span
-                  v-if="selectedData && selectedData.totalCredit"
-                  >{{ selectedData.totalCredit }}</span
-                >學分</b
-              >
+              <td colspan="2" style="text-align: right; padding-right: 10px">
+                <b style="display: block; text-align: right"
+                  >預警課程學分數合計：<span
+                    v-if="selectedData && selectedData.totalCredit"
+                    >{{ selectedData.totalCredit }}</span
+                  >學分</b
+                >
+              </td>
             </tr>
           </tbody>
         </table>
@@ -113,7 +135,7 @@ import { ref, computed, onMounted } from "vue";
 import print from "vue3-print-nb";
 
 export default {
-  name: "PrintContent",
+  name: "Print",
   directives: { print },
   setup() {
     const apiDataStore = useApiDataStore();
@@ -217,32 +239,104 @@ export default {
 </script>
 
 <style scoped>
+body {
+  font-family: "標楷體", "Microsoft JhengHei", sans-serif;
+}
 .print-content {
   @page {
     size: A4;
   }
-  display: flex;
-  flex-direction: column;
+  height: 100%; /* 將容器的高度設置為視窗的高度 */
+  width: 100%;
+  display: flex; /* 使用 Flexbox 來使兩個部分排列 */
+  align-items: center; /* 將容器垂直置中 */
+  justify-content: center; /* 將容器水平置中 */
+  flex-direction: column; /* 垂直排列 */
+  /*border: 1px solid black;  在容器周圍添加黑邊 */
+  font-family: "標楷體", "Microsoft JhengHei", sans-serif;
+}
+table {
+  border-collapse: collapse;
 }
 
-@page :first {
-  /* background-color: red; */
+table,
+th,
+td {
+  border: 1px solid black;
+  vertical-align: middle;
 }
 
-@page :left {
-  margin-left: 2cm;
-  margin-right: 4cm;
+@page {
+  margin-bottom: 0mm;
+  margin-top: 0mm;
 }
-@page :right {
-  margin-left: 4cm;
-  margin-right: 2cm;
+
+@media print {
+  .print-content {
+    width: 100%;
+    height: 29.7cm;
+    margin: 0 auto;
+    background-color: white;
+  }
+}
+
+/* 用於屏幕上的顯示 */
+@media screen {
+  .print-content {
+    width: 21cm;
+    height: 29.7cm;
+    margin: 0 auto;
+    background-color: white;
+  }
 }
 
 .section1 {
-  flex: 1;
+  width: 100%;
+  height: 9.9cm;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
 .section2 {
-  flex: 2;
+  width: 100%;
+  height: 19.8cm;
+}
+.s2-content {
+  margin-top: 60px;
+}
+.some-content {
+  text-align: right;
+  margin-right: 0px;
+}
+.table-header {
+  text-align: center;
+}
+.header {
+  text-align: center;
+  /* justify-content: center;
+  align-items: center; */
+}
+.course-table {
+  width: 100%;
+  margin-top: 8px;
+}
+.s1-std {
+  align-self: flex-end;
+  text-align: right;
+  color: rgb(160, 160, 160);
+}
+.s1-address {
+  text-align: center;
+}
+.s1-1 {
+  width: 100%;
+  height: 9.9cm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center;  */
 }
 </style>
