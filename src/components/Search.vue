@@ -93,7 +93,6 @@
                       name="ChooseSemester"
                       type="radio"
                       class="form-check-input"
-                      checked=""
                       required=""
                       value="1"
                     />
@@ -108,7 +107,6 @@
                       name="ChooseSemester"
                       type="radio"
                       class="form-check-input"
-                      checked=""
                       required=""
                       value="2"
                     />
