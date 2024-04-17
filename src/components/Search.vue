@@ -23,8 +23,9 @@
               <div class="row g-3">
                 <div class="col-sm-6">
                   <label for="firstName" class="form-label"
-                    >&nbsp;➢&nbsp;預警課程數&nbsp;(&nbsp;即單一學生有幾門課程被預警&nbsp;)&nbsp;≥</label
-                  >
+                    >&nbsp;➢&nbsp;<font class="required">*</font
+                    >&nbsp;預警課程數&nbsp;(&nbsp;即單一學生有幾門課程被預警&nbsp;)&nbsp;≥
+                  </label>
                   <input
                     type="text"
                     v-model="inputEarlyWarningCourses"
@@ -40,7 +41,8 @@
 
                 <div class="col-sm-6">
                   <label for="lastName" class="form-label"
-                    >&nbsp;➢&nbsp;或預警必修課程數&nbsp;(&nbsp;必修課指選課檔別為必修之課程&nbsp;)</label
+                    >&nbsp;➢&nbsp;<font class="required">*</font
+                    >&nbsp;或預警必修課程數&nbsp;(&nbsp;必修課指選課檔別為必修之課程&nbsp;)</label
                   >
                   <input
                     type="text"
@@ -70,7 +72,8 @@
 
                 <div class="col-4">
                   <label for="address" class="form-label"
-                    >&nbsp;➢&nbsp;期中預警之學期</label
+                    >&nbsp;➢&nbsp;<font class="required">*</font
+                    >&nbsp;期中預警之學期</label
                   >
                   <input
                     type="text"
@@ -739,6 +742,9 @@ html[屬性樣式] {
 }
 .instructions-header {
   font-size: 1.3rem;
+}
+.required {
+  color: #d40000;
 }
 
 @media (min-width: 768px) {
