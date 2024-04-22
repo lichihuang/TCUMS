@@ -183,7 +183,7 @@
                 <div class="col-3 btn-box"></div>
               </div>
 
-              <hr class="my-4 instructions-block" />
+              <hr class="my-4" />
               <div class="bd-callout bd-callout-warning">
                 <div class="row">
                   <div class="col-md-2">
@@ -260,17 +260,23 @@ export default {
     const store = createStore({
       state: () => ({
         apiData: [],
+        printSelection: [],
       }),
 
       actions: {
         setApiData(data) {
           this.apiData = data;
         },
+        setPrintSelection(selection) {
+          this.printSelection = selection;
+        },
       },
-
       getters: {
         getApiData() {
           return this.apiData;
+        },
+        getPrintSelection() {
+          return this.printSelection;
         },
       },
     });
@@ -442,6 +448,8 @@ export default {
           if (response && response.status === 200) {
             if (response.data && response.data.length > 0) {
               console.log("相符資料：", response.data);
+              response.data.inputAcademicYear = inputAcademicYear.value;
+              response.data.inputSemester = inputSemester.value;
               apiDataStore.setApiData(response.data);
               createExcelFromData(response.data);
             } else {

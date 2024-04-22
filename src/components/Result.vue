@@ -382,12 +382,6 @@ export default {
     }
 
     onMounted(async () => {
-      /* const semester = router.params.semester;
-      const year = router.params.year;
-
-      if (semester && year) {
-        resultTitle.value = `${year}學年第${semester}學期期中預警學生`;
-      } */
       if (router.params) {
         const { semester, year } = router.params;
         if (semester && year) {
@@ -520,37 +514,48 @@ export default {
 
     const showPrintContent = ref(false);
 
+    /* const handlePrint = async () => {
+      console.log("Print！");
+      console.log("printSelection：", printSelection.value);
+      console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
+      apiDataStore.setPrintSelection(printSelection.value);
+      await router.push({ name: "PrintContent" });
+    }; */
+
+    /* const handlePrint = async () => {
+      console.log("Print！");
+      console.log("printSelection：", printSelection);
+      const selectedData = printSelection.map((index) => apiData.value[index]);
+      console.log("Selected Data:", selectedData);
+      apiDataStore.setPrintSelection(selectedData);
+      await router.push({ name: "PrintContent" });
+    }; */
+
     const handlePrint = async () => {
       console.log("Print！");
       console.log("printSelection：", printSelection.value);
-      /* console.log("Print！");
-      console.log("printSelection：", printSelection.value);
 
-      const printableContent = document.querySelector(".printContent");
-      if (!printableContent) {
-        console.error("找不到具有 class 為 'printContent' 的元素。");
-        return;
+      // 将 printSelection 转换为数组
+      const selectedIndexes = Object.keys(printSelection.value).filter(
+        (index) => printSelection.value[index]
+      );
+
+      // 检查 selectedIndexes 是否是一个数组
+      if (Array.isArray(selectedIndexes)) {
+        // 使用 map 方法获取选中的数据
+        const selectedData = selectedIndexes.map((index) => apiData.value[index]);
+        console.log("Selected Data:", selectedData);
+        apiDataStore.setPrintSelection(selectedData);
+        await router.push({ name: "PrintContent" });
+      } else {
+        console.error("printSelection is not an array!");
+        // 如果 printSelection 不是数组，您可能需要进一步检查它的类型或值
       }
-
-      showPrintContent.value = true;
-      setTimeout(() => {
-        let newWin = window.open("", "_blank");
-        if (printableContent.innerHTML) {
-          newWin.document.write(printableContent.innerHTML);
-          newWin.document.close();
-          newWin.print();
-        } else {
-          console.error("printableContent 內容為空。");
-        }
-        showPrintContent.value = false;
-      }, 1000); */
-      await router.push({ name: "PrintContent" });
     };
 
     const buttonSelectAll = () => {
       console.log("SelectAll");
       selectAll.value = true;
-      //printSelection.value = Array(apiData.value.length).fill(true);
       printSelection.value = Array.from(
         { length: apiDataStore.value.length },
         () => true
