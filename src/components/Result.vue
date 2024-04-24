@@ -531,25 +531,45 @@ export default {
       await router.push({ name: "PrintContent" });
     }; */
 
-    const handlePrint = async () => {
+    /* const handlePrint = async () => {
       console.log("Print！");
       console.log("printSelection：", printSelection.value);
 
-      // 将 printSelection 转换为数组
       const selectedIndexes = Object.keys(printSelection.value).filter(
         (index) => printSelection.value[index]
       );
 
-      // 检查 selectedIndexes 是否是一个数组
       if (Array.isArray(selectedIndexes)) {
-        // 使用 map 方法获取选中的数据
-        const selectedData = selectedIndexes.map((index) => apiData.value[index]);
+        const selectedData = selectedIndexes.map(
+          (index) => apiDataStore.getApiData[index]
+        );
         console.log("Selected Data:", selectedData);
-        apiDataStore.setPrintSelection(selectedData);
+        apiDataStore.setSelectedData(selectedData);
+        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
         await router.push({ name: "PrintContent" });
       } else {
         console.error("printSelection is not an array!");
-        // 如果 printSelection 不是数组，您可能需要进一步检查它的类型或值
+      }
+    }; */
+
+    const handlePrint = async () => {
+      console.log("Print！");
+      console.log("printSelection：", printSelection.value);
+
+      const selectedIndexes = Object.keys(printSelection.value).filter(
+        (index) => printSelection.value[index]
+      );
+
+      if (Array.isArray(selectedIndexes)) {
+        const selectedData = selectedIndexes.map((index) =>
+          JSON.parse(JSON.stringify(apiDataStore.getApiData[index]))
+        );
+        console.log("Selected Data:", selectedData);
+        apiDataStore.setSelectedData(selectedData);
+        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
+        await router.push({ name: "PrintContent" });
+      } else {
+        console.error("printSelection is not an array!");
       }
     };
 

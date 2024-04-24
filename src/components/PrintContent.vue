@@ -18,21 +18,11 @@
       </div>
       <div class="s1-std">
         <label>
-          <span v-if="selectedData && selectedData.department">{{
-            selectedData.department
-          }}</span
-          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.degree">{{
-            selectedData.degree
-          }}</span
-          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentClass">{{
-            selectedData.studentClass
-          }}</span
-          >&nbsp;-&nbsp;<span v-if="selectedData && selectedData.studentId">{{
-            selectedData.studentId
-          }}</span
-          ><br /><span v-if="selectedData && electedData.studentName">{{
-            selectedData.studentName
-          }}</span
+          <span>{{ departmentName }}</span
+          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.degree }}</span
+          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.studentClass }}</span
+          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.studentId }}</span
+          ><br /><span>{{ selectedData && selectedData.studentName }}</span
           >&nbsp;同學
         </label>
       </div>
@@ -69,23 +59,13 @@
           </div>
         </div>
         <label>
-          班級：<span v-if="selectedData && selectedData.department">{{
-            departmentName
-          }}</span
-          ><span v-if="selectedData && selectedData.degree">{{
-            selectedData.degree
-          }}</span
-          >年<span v-if="selectedData && selectedData.studentClass">{{
-            selectedData.studentClass
-          }}</span
+          班級：<span>{{ departmentName }}</span
+          ><span>{{ selectedData && selectedData.degree }}</span
+          >年<span>{{ selectedData && selectedData.studentClass }}</span
           >班<br />
-          學號：<span v-if="selectedData && selectedData.studentId">{{
-            selectedData.studentId
-          }}</span
+          學號：<span>{{ selectedData && selectedData.studentId }}</span
           ><br />
-          姓名：<span v-if="selectedData && selectedData.studentName">{{
-            selectedData.studentName
-          }}</span>
+          姓名：<span>{{ selectedData && selectedData.studentName }}</span>
         </label>
       </div>
       <div>
@@ -140,6 +120,7 @@ export default {
   setup() {
     const apiDataStore = useApiDataStore();
     const currentDate = ref("");
+    const selectedData = computed(() => apiDataStore.selectedData);
 
     onMounted(() => {
       window.print();
@@ -217,23 +198,32 @@ export default {
       "": "未知科系",
     };
 
-    const departmentName = computed(() => {
-      const result = [];
-      for (const selectedData of paginatedData.value) {
-        for (const warning of selectedData.warnings) {
-          if (warning.department && deptName.hasOwnProperty(warning.department)) {
-            result.push(deptName[warning.department]);
-            break;
-          }
-        }
+    /* const departmentName = computed(() => {
+      const warning = selectedData.value && selectedData.value.warnings[0];
+      if (warning && warning.department && deptName.hasOwnProperty(warning.department)) {
+        return deptName[warning.department];
+      } else {
+        return "未知科系";
       }
-      return result;
+    }); */
+
+    const departmentName = computed(() => {
+      if (!selectedData.value) return "";
+      const warnings = selectedData.value.warnings || [];
+      const departmentSet = new Set();
+      warnings.forEach((warning) => {
+        if (warning.department && deptName.hasOwnProperty(warning.department)) {
+          departmentSet.add(deptName[warning.department]);
+        }
+      });
+      return Array.from(departmentSet).join(", ");
     });
 
     return {
       selectedData: apiDataStore.selectedData,
       currentDate,
       departmentName,
+      selectedData,
     };
   },
 };
@@ -247,13 +237,12 @@ body {
   @page {
     size: A4;
   }
-  height: 100%; /* 將容器的高度設置為視窗的高度 */
+  height: 100%;
   width: 100%;
-  display: flex; /* 使用 Flexbox 來使兩個部分排列 */
-  align-items: center; /* 將容器垂直置中 */
-  justify-content: center; /* 將容器水平置中 */
-  flex-direction: column; /* 垂直排列 */
-  /*border: 1px solid black;  在容器周圍添加黑邊 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   font-family: "標楷體", "Microsoft JhengHei", sans-serif;
 }
 table {

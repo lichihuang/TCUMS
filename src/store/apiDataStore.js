@@ -5,6 +5,7 @@ export const useApiDataStore = defineStore({
   state: () => ({
     apiData: [],
     printSelection: [],
+    selectedData: null,
   }),
   actions: {
     setApiData(data) {
@@ -13,13 +14,19 @@ export const useApiDataStore = defineStore({
     setPrintSelection(selection) {
       this.printSelection = selection;
     },
+    setSelectedData(data) {
+      this.selectedData = data;
+    },
   },
   getters: {
     getApiData() {
       return this.apiData;
     },
     getPrintSelection() {
-      return this/* .$state */.printSelection;
+      return this.printSelection;
+    },
+    getSelectedData() {
+      return this.selectedData;
     },
   },
 });
