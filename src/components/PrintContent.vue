@@ -1,112 +1,103 @@
 <template>
-  <div class="print-content">
-    <div class="section1">
-      <div class="s1-1">
-        <div class="some-content">
-          <p><b>【 限時專送 】</b></p>
-        </div>
-        <div class="s1-address">
-          <b
-            ><label v-if="selectedData && selectedData.address">{{
-              selectedData.address
-            }}</label>
-            <p v-if="selectedData && selectedData.parent">
-              {{ selectedData.parent }}&nbsp;先生&nbsp;/&nbsp;女士&nbsp;收
-            </p></b
-          >
-        </div>
-      </div>
-      <div class="s1-std">
-        <label>
-          <span>{{ departmentName }}</span
-          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.degree }}</span
-          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.studentClass }}</span
-          >&nbsp;-&nbsp;<span>{{ selectedData && selectedData.studentId }}</span
-          ><br /><span>{{ selectedData && selectedData.studentName }}</span
-          >&nbsp;同學
-        </label>
-      </div>
-    </div>
-    <div class="section2">
-      <div class="s2-content">
-        <div class="s2-text">
-          <label v-if="selectedData && selectedData.parent">
-            {{ selectedData.parent }}家長，您好
-          </label>
-          <label>
-            貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
-            <b>若有相關問題請與學系導師聯繫</b>。謝謝！ </label
-          ><br />
-          <div class="some-content"><p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p></div>
-
-          <div class="header">
-            <label>
-              <b
-                ><span v-if="selectedData && selectedData.inputAcademicYear">{{
-                  selectedData.inputAcademicYear
-                }}</span
-                >學年度第<span v-if="selectedData && selectedData.inputSemester">{{
-                  selectedData.inputSemester
-                }}</span
-                >學期期中考試預警通知</b
-              >
-            </label>
-          </div>
-          <br />
+  <div v-for="(data, index) in selectedDataArray" :key="index">
+    <div class="print-content">
+      <div class="section1">
+        <div class="s1-1">
           <div class="some-content">
-            <label>列印日期：{{ currentDate }}</label
-            ><br />
+            <p><b>【 限時專送 】</b></p>
+          </div>
+          <div class="s1-address">
+            <b
+              ><label>{{ selectedDataArray.address }}</label></b
+            >
+            <b v-if="selectedDataArray && selectedDataArray.parent">
+              {{ selectedDataArray.parent }}&nbsp;先生&nbsp;/&nbsp;女士&nbsp;收
+            </b>
           </div>
         </div>
-        <label>
-          班級：<span>{{ departmentName }}</span
-          ><span>{{ selectedData && selectedData.degree }}</span
-          >年<span>{{ selectedData && selectedData.studentClass }}</span
-          >班<br />
-          學號：<span>{{ selectedData && selectedData.studentId }}</span
-          ><br />
-          姓名：<span>{{ selectedData && selectedData.studentName }}</span>
-        </label>
+        <div class="s1-std">
+          <label>
+            <span>{{ departmentName[index] }}</span
+            >&nbsp;-&nbsp; <span>{{ selectedDataArray.degree }}</span
+            >&nbsp;-&nbsp; <span>{{ selectedDataArray.studentClass }}</span
+            >&nbsp;-&nbsp; <span>{{ selectedDataArray.studentId }}</span
+            ><br />
+            <span>{{ selectedDataArray.studentName }}</span
+            >&nbsp;同學
+          </label>
+        </div>
       </div>
-      <div>
-        <table class="course-table">
-          <thead class="table-header">
-            <th><b>課程名稱</b></th>
-            <th><b>學分數</b></th>
-          </thead>
-          <tbody>
-            <tr>
-              <td v-if="selectedData && selectedData.courseName">
-                {{ selectedData.courseName }}
-              </td>
-              <td v-if="selectedData && selectedData.credit">
-                {{ selectedData.credit }}學分
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="text-align: right; padding-right: 10px">
-                <b style="display: block; text-align: right"
-                  >預警課程學分數合計：<span
-                    v-if="selectedData && selectedData.totalCredit"
-                    >{{ selectedData.totalCredit }}</span
-                  >學分</b
+      <div class="section2">
+        <div class="s2-content">
+          <div class="s2-text">
+            <p>{{ selectedDataArray.parent }}家長，您好</p>
+            <label>
+              貴子弟本次期中考受預警科目如下，請多留意貴子弟在校的學習狀況：<br />
+              <b>若有相關問題請與學系導師聯繫</b>。謝謝！ </label
+            ><br />
+            <div class="some-content"><p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p></div>
+
+            <div class="header">
+              <label>
+                <b
+                  ><span>{{ selectedDataArray.inputAcademicYear }}</span
+                  >學年度第<span>{{ selectedDataArray.inputSemester }}</span
+                  >學期期中考試預警通知</b
                 >
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p>
-          <b
-            >※&nbsp;本學期總修習學分數：<span
-              v-if="selectedData && selectedData.totalCredit"
-              >{{ selectedData.totalCredit }}</span
-            >學分</b
-          >
-        </p>
+              </label>
+            </div>
+            <br />
+            <div class="some-content">
+              <label>列印日期：{{ currentDate }}</label
+              ><br />
+            </div>
+          </div>
+          <label>
+            班級：<span>{{ departmentName[index] }}</span
+            ><span>{{ selectedDataArray.degree }}</span
+            >年<span>{{ selectedDataArray.studentClass }}</span
+            >班<br />
+            學號：<span>{{ selectedDataArray.studentId }}</span
+            ><br />
+            姓名：<span>{{ selectedDataArray.studentName }}</span>
+          </label>
+        </div>
+        <div>
+          <table class="course-table">
+            <thead class="table-header">
+              <th><b>課程名稱</b></th>
+              <th><b>學分數</b></th>
+            </thead>
+            <tbody>
+              <tr>
+                <td v-if="selectedDataArray && selectedDataArray.courseName">
+                  {{ selectedData.courseName }}
+                </td>
+                <td v-if="selectedDataArray && selectedDataArray.credit">
+                  {{ selectedDataArray.credit }}學分
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="text-align: right; padding-right: 10px">
+                  <b style="display: block; text-align: right"
+                    >預警課程學分數合計：<span>{{ selectedDataArray.totalCredit }}</span
+                    >學分</b
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <b
+              >※&nbsp;本學期總修習學分數：<span>{{ selectedDataArray.totalCredit }}</span
+              >學分</b
+            >
+          </p>
+        </div>
       </div>
     </div>
+    <div style="page-break-after: always"></div>
   </div>
-  <div style="page-break-after: always"></div>
 </template>
 
 <script>
@@ -121,6 +112,9 @@ export default {
     const apiDataStore = useApiDataStore();
     const currentDate = ref("");
     const selectedData = computed(() => apiDataStore.selectedData);
+    const selectedDataArray = computed(() => {
+      return apiDataStore.getSelectedData;
+    });
 
     onMounted(() => {
       window.print();
@@ -198,31 +192,26 @@ export default {
       "": "未知科系",
     };
 
-    /* const departmentName = computed(() => {
-      const warning = selectedData.value && selectedData.value.warnings[0];
-      if (warning && warning.department && deptName.hasOwnProperty(warning.department)) {
-        return deptName[warning.department];
-      } else {
-        return "未知科系";
-      }
-    }); */
-
     const departmentName = computed(() => {
-      if (!selectedData.value) return "";
-      const warnings = selectedData.value.warnings || [];
-      const departmentSet = new Set();
-      warnings.forEach((warning) => {
-        if (warning.department && deptName.hasOwnProperty(warning.department)) {
-          departmentSet.add(deptName[warning.department]);
+      if (!selectedDataArray.value.length) return [];
+
+      const result = [];
+      for (const item of selectedDataArray.value) {
+        const warnings = item.warnings || [];
+        for (const warning of warnings) {
+          if (warning.department && deptName.hasOwnProperty(warning.department)) {
+            result.push(deptName[warning.department]);
+            break;
+          }
         }
-      });
-      return Array.from(departmentSet).join(", ");
+      }
+      return result;
     });
 
     return {
-      selectedData: apiDataStore.selectedData,
       currentDate,
       departmentName,
+      selectedDataArray,
       selectedData,
     };
   },
