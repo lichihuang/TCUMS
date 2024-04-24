@@ -257,7 +257,7 @@ export default {
     const semesterWarnings = ref([]);
     const apiDataStore = useApiDataStore();
 
-    const store = createStore({
+    /* const store = createStore({
       state: () => ({
         apiData: [],
         printSelection: [],
@@ -279,7 +279,7 @@ export default {
           return this.printSelection;
         },
       },
-    });
+    }); */
 
     const collegeDepartments = {
       醫學院: [

@@ -5,7 +5,7 @@ export const useApiDataStore = defineStore({
   state: () => ({
     apiData: [],
     printSelection: [],
-    selectedData: null,
+    selectedData: [],
   }),
   actions: {
     setApiData(data) {

@@ -514,44 +514,6 @@ export default {
 
     const showPrintContent = ref(false);
 
-    /* const handlePrint = async () => {
-      console.log("Print！");
-      console.log("printSelection：", printSelection.value);
-      console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
-      apiDataStore.setPrintSelection(printSelection.value);
-      await router.push({ name: "PrintContent" });
-    }; */
-
-    /* const handlePrint = async () => {
-      console.log("Print！");
-      console.log("printSelection：", printSelection);
-      const selectedData = printSelection.map((index) => apiData.value[index]);
-      console.log("Selected Data:", selectedData);
-      apiDataStore.setPrintSelection(selectedData);
-      await router.push({ name: "PrintContent" });
-    }; */
-
-    /* const handlePrint = async () => {
-      console.log("Print！");
-      console.log("printSelection：", printSelection.value);
-
-      const selectedIndexes = Object.keys(printSelection.value).filter(
-        (index) => printSelection.value[index]
-      );
-
-      if (Array.isArray(selectedIndexes)) {
-        const selectedData = selectedIndexes.map(
-          (index) => apiDataStore.getApiData[index]
-        );
-        console.log("Selected Data:", selectedData);
-        apiDataStore.setSelectedData(selectedData);
-        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
-        await router.push({ name: "PrintContent" });
-      } else {
-        console.error("printSelection is not an array!");
-      }
-    }; */
-
     const handlePrint = async () => {
       console.log("Print！");
       console.log("printSelection：", printSelection.value);
@@ -560,16 +522,17 @@ export default {
         (index) => printSelection.value[index]
       );
 
-      if (Array.isArray(selectedIndexes)) {
+      if (Array.isArray(selectedIndexes) && selectedIndexes.length > 0) {
         const selectedData = selectedIndexes.map((index) =>
           JSON.parse(JSON.stringify(apiDataStore.getApiData[index]))
         );
         console.log("Selected Data:", selectedData);
         apiDataStore.setSelectedData(selectedData);
         console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
+        console.log("apiDataStore 中被勾選的資料：", apiDataStore.selectedData);
         await router.push({ name: "PrintContent" });
       } else {
-        console.error("printSelection is not an array!");
+        console.error("printSelection is not an array or is empty!");
       }
     };
 
