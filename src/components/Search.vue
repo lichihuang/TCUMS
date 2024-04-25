@@ -257,30 +257,6 @@ export default {
     const semesterWarnings = ref([]);
     const apiDataStore = useApiDataStore();
 
-    /* const store = createStore({
-      state: () => ({
-        apiData: [],
-        printSelection: [],
-      }),
-
-      actions: {
-        setApiData(data) {
-          this.apiData = data;
-        },
-        setPrintSelection(selection) {
-          this.printSelection = selection;
-        },
-      },
-      getters: {
-        getApiData() {
-          return this.apiData;
-        },
-        getPrintSelection() {
-          return this.printSelection;
-        },
-      },
-    }); */
-
     const collegeDepartments = {
       醫學院: [
         // 大學部

@@ -529,7 +529,7 @@ export default {
         console.log("Selected Data:", selectedData);
         apiDataStore.setSelectedData(selectedData);
         console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
-        console.log("apiDataStore 中被勾選的資料：", apiDataStore.selectedData);
+        console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
         await router.push({ name: "PrintContent" });
       } else {
         console.error("printSelection is not an array or is empty!");
@@ -821,5 +821,12 @@ select {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
+}
+
+.news-border {
+  width: 30px;
+  height: 2px;
+  margin: 10px 0;
+  transition: all 0.4s;
 }
 </style>

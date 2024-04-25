@@ -16,14 +16,13 @@
           </div>
           <div class="s1-std">
             <label class="s1-student">
-              <span>{{ data.warnings[0].department }}</span>
-              -<span>{{ data.warnings[0].degree }}</span> -<span>{{
-                data.warnings[0].studentClass
-              }}</span>
-              -<span>{{ data.warnings[0].studentId }}</span>
+              <span>{{ data.warnings[0].department }}</span
+              >-<span>{{ data.warnings[0].degree }}</span
+              >-<span>{{ data.warnings[0].studentClass }}</span
+              >-<span>{{ data.studentId }}</span>
               <br />
               <span>{{ data.warnings[0].studentName }}</span>
-              &nbsp;同學
+              同學
             </label>
           </div>
         </div>
@@ -37,13 +36,14 @@
               </label>
               <br />
               <div class="some-content">
-                <p>慈濟大學教務處註冊組&nbsp;&nbsp;敬啟</p>
+                <p>慈濟大學教務處註冊組&nbsp;敬啟</p>
               </div>
               <div class="header">
                 <label>
                   <b
-                    ><span>{{ data.inputAcademicYear }}</span> 學年度第
-                    <span>{{ data.inputSemester }}</span> 學期期中考試預警通知</b
+                    ><span>{{ inputAcademicYear }}</span
+                    >學年度第<span>{{ inputSemester }}</span
+                    >學期 期中考試預警通知</b
                   >
                 </label>
               </div>
@@ -55,9 +55,10 @@
             </div>
             <label>
               班級：<span>{{ departmentName[index] }}&nbsp;</span>
-              <span>{{ data.warnings[0].degree }}</span>
-              年<span>{{ data.warnings[0].studentClass }}</span> 班<br />
-              學號：<span>{{ data.warnings[0].studentId }}</span
+              <span>{{ data.warnings[0].degree }}</span
+              >年<span>{{ data.warnings[0].studentClass }}</span
+              >班<br />
+              學號：<span>{{ data.studentId }}</span
               ><br />
               姓名：<span>{{ data.warnings[0].studentName }}</span>
             </label>
@@ -76,7 +77,9 @@
                 <tr>
                   <td colspan="2" style="text-align: right; padding-right: 7px">
                     <b style="display: block; text-align: right">
-                      預警課程學分數合計：<span>{{ data.totalCredit }}</span
+                      預警課程學分數合計：<span>{{
+                        totalWarningCredits[data.studentId]
+                      }}</span
                       >學分
                     </b>
                   </td>
@@ -99,7 +102,7 @@
 
 <script>
 import { useApiDataStore } from "../store/apiDataStore";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import print from "vue3-print-nb";
 
 export default {
@@ -117,10 +120,12 @@ export default {
     const selectedDataArray = computed(() => {
       return apiDataStore.getSelectedData;
     });
+    const apiData = computed(() => apiDataStore.getApiData);
+    const inputAcademicYear = computed(() => apiData.value.inputAcademicYear);
+    const inputSemester = computed(() => apiData.value.inputSemester);
     const printedCounts = {};
 
-    onMounted(() => {
-      window.print();
+    const updateCurrentDate = () => {
       const now = new Date();
       const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1)
         .toString()
@@ -135,7 +140,13 @@ export default {
         .toString()
         .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
       currentDate.value = formattedDate;
+    };
+
+    watch(currentDate, () => {
+      window.print();
     });
+
+    updateCurrentDate();
 
     const deptName = {
       201: "國際服務產業管理學士學位學程",
@@ -223,12 +234,28 @@ export default {
       return true;
     }
 
+    const totalWarningCredits = computed(() => {
+      const totalCredits = {};
+      selectedDataArray.value.forEach((data) => {
+        let studentId = data.studentId;
+        let totalCredit = 0;
+        data.warnings.forEach((warning) => {
+          totalCredit += warning.credit;
+        });
+        totalCredits[studentId] = totalCredit;
+      });
+      return totalCredits;
+    });
+
     return {
       shouldDisplayWarning,
       currentDate,
       departmentName,
       selectedDataArray,
       selectedData,
+      inputAcademicYear,
+      inputSemester,
+      totalWarningCredits,
     };
   },
 };
