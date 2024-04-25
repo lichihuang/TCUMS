@@ -52,7 +52,11 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="(item, index) in paginatedData" :key="index">
+                        <tr
+                          v-for="(item, index) in paginatedData"
+                          :key="index"
+                          class="floating-row"
+                        >
                           <td class="text-center">{{ getSerialNumber(index) }}</td>
                           <td class="text-center">
                             <input type="checkbox" v-model="printSelection[index]" />
@@ -84,7 +88,10 @@
                             </div>
                           </td>
 
-                          <td v-if="item.warnings && item.warnings.length > 0">
+                          <td
+                            v-if="item.warnings && item.warnings.length > 0"
+                            class="floating-row"
+                          >
                             <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
                               <b>開課課程：</b>{{ warning.courseId }}&nbsp;-&nbsp;{{
                                 warning.class
@@ -95,9 +102,11 @@
                               >{{ warning.teacher }}&nbsp;&nbsp;&nbsp;<b>教師所屬系所：</b
                               >{{ teacherDepartment[index] }}<br />
                               <b>期中預警備註說明：</b>{{ warning.memo }}<br />
-                              <span class="etc-content-text"
+                              <span
+                                v-if="wIndex === item.warnings.length - 1"
+                                class="tch-insert-text"
                                 >開課教師登錄日期：{{ formatDate(warning.insTime) }}</span
-                              ><br />
+                              >
                               <hr v-if="wIndex < item.warnings.length - 1" />
                             </div>
                             <b class="total-credit"
@@ -693,20 +702,23 @@ td {
 .table td:first-child {
   width: 10%;
 }
-
 .table th:nth-child(2),
 .table td:nth-child(2) {
   width: 13%;
 }
-
 .table th:nth-child(3),
 .table td:nth-child(3) {
   width: 30%;
 }
-
 .table th:nth-child(4),
 .table td:nth-child(4) {
   width: 47%;
+}
+tr.floating-row {
+  transition: box-shadow 0.03s ease;
+}
+tr.floating-row:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 .std-state-text {
   color: #ff7809;
@@ -814,7 +826,10 @@ select {
   margin-left: auto;
 }
 .total-credit {
-  line-height: 2.5;
+  line-height: 0.1;
+}
+.tch-insert-text {
+  line-height: 3;
 }
 
 @media (min-width: 768px) {
