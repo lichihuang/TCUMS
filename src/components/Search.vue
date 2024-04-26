@@ -237,6 +237,8 @@ import CopyrightNotice from "../components/CopyrightNotice.vue";
 import axios from "axios";
 import { createStore } from "../store/pinia";
 import { useApiDataStore } from "../store/apiDataStore";
+import Swal from "sweetalert2";
+import sweetAlert from "../components/sweetAlert";
 
 export default {
   name: "Search",
@@ -341,7 +343,7 @@ export default {
       }
 
       if (errorMessages) {
-        alert(errorMessages);
+        sweetAlert.typicalType("注意", errorMessages, "warning", `OK`);
       } else {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
@@ -351,7 +353,7 @@ export default {
 
         try {
           const response = await axios.post(
-            "http://localhost:5256/api/SemesterWarning/Combined", // 修改為正確的端點 URL
+            "http://localhost:5256/api/SemesterWarning/Combined",
             requestData,
             {
               headers: {
@@ -371,15 +373,15 @@ export default {
               await router.push({ name: "ResultMain" });
             } else {
               console.log("無相符資料");
-              alert("無相符資料");
+              sweetAlert.typicalType("發生錯誤", "無相符資料", "error", `OK`);
             }
           } else {
             console.error("API 請求失敗:", response.statusText);
-            alert("搜尋失敗，請稍後再試。");
+            sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
           }
         } catch (error) {
           console.error("Error during API request:", error);
-          alert("搜尋失敗，請稍後再試。");
+          sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
         }
       }
     };
@@ -400,7 +402,7 @@ export default {
       }
 
       if (errorMessages) {
-        alert(errorMessages);
+        sweetAlert.typicalType("注意", errorMessages, "warning", `OK`);
       } else {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
@@ -410,7 +412,7 @@ export default {
 
         try {
           const response = await axios.post(
-            "http://localhost:5256/api/SemesterWarning/Combined", // 修改為正確的端點 URL
+            "http://localhost:5256/api/SemesterWarning/Combined",
             requestData,
             {
               headers: {
@@ -430,15 +432,15 @@ export default {
               createExcelFromData(response.data);
             } else {
               console.log("無相符資料");
-              alert("無相符資料");
+              sweetAlert.typicalType("發生錯誤", "無相符資料", "error", `OK`);
             }
           } else {
             console.error("API 請求失敗:", response.statusText);
-            alert("搜尋失敗，請稍後再試。");
+            sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
           }
         } catch (error) {
           console.error("Error during API request:", error);
-          alert("搜尋失敗，請稍後再試。");
+          sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
         }
       }
     };

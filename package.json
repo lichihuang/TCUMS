@@ -24,7 +24,7 @@
     "pdfkit": "^0.15.0",
     "pinia": "^2.1.7",
     "print-js": "^1.6.0",
-    "sweetalert2": "^11.6.13",
+    "sweetalert2": "^11.10.8",
     "typescript": "^5.4.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",

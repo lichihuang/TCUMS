@@ -12,6 +12,10 @@ import 'mdb-vue-ui-kit/css/mdb.min.css';
 
 import { createPinia } from 'pinia'
 import { SemesterWarningCountStore } from './store/counter'
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 document.body.style.background = 'url("./LoginVideo.mp4") center center / cover no-repeat';
 
 const app = createApp(App);
@@ -23,5 +27,6 @@ app.use(router);
 app.mount('#app'); 
 app.use(createPinia());
 app.use(Print)
+app.use(VueSweetalert2);
 
 app.config.globalProperties.$axios = axios;

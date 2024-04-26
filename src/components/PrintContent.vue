@@ -124,6 +124,7 @@ export default {
     const inputAcademicYear = computed(() => apiData.value.inputAcademicYear);
     const inputSemester = computed(() => apiData.value.inputSemester);
     const printedCounts = {};
+    const printInProgress = ref(false);
 
     const updateCurrentDate = () => {
       const now = new Date();
@@ -145,6 +146,18 @@ export default {
     watch(currentDate, () => {
       window.print();
     });
+
+    window.onbeforeprint = () => {
+      printInProgress.value = true;
+    };
+
+    window.onafterprint = () => {
+      if (printInProgress.value) {
+        history.back();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      printInProgress.value = false;
+    };
 
     updateCurrentDate();
 
