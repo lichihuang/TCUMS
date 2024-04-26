@@ -58,7 +58,10 @@
                           class="floating-row"
                         >
                           <td class="text-center">{{ getSerialNumber(index) }}</td>
-                          <td class="text-center">
+                          <td
+                            class="text-center"
+                            @click="handleCheckboxClick($event, index)"
+                          >
                             <input type="checkbox" v-model="printSelection[index]" />
                           </td>
                           <td v-if="item.warnings && item.warnings.length > 0">
@@ -375,6 +378,14 @@ export default {
       return calculateEndIndex();
     });
 
+    const toggleCheckbox = (index) => {
+      printSelection.value[index] = !printSelection.value[index];
+    };
+
+    const handleCheckboxClick = (event, index) => {
+      toggleCheckbox(index);
+    };
+
     const apiDataStore = useApiDataStore();
 
     const changePageSize = (value) => {
@@ -591,6 +602,8 @@ export default {
       buttonSelectAll,
       buttonDeselect,
       formatDate,
+      toggleCheckbox,
+      handleCheckboxClick,
     };
   },
 };
