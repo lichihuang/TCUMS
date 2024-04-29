@@ -11,15 +11,15 @@
           </li>
         </ul>
         <div class="d-flex align-items-start ms-auto home" style="margin-top: 3px">
-          <div class="d-flex flex-column" @click="home">
+          <div class="home-area d-flex flex-column" @click="home">
             <lord-icon
               src="https://cdn.lordicon.com/epietrpn.json"
               trigger="hover"
               colors="primary:#121331,secondary:#d1e3fa,tertiary:#d59f80,quaternary:#ffc26c,quinary:#faebd7,senary:#646e78,septenary:#ffffff"
               stroke="bold"
-              class="nav-link"
+              class="nav-link home-pic"
             ></lord-icon>
-            <p class="home-title">HOME</p>
+            <label class="home-title home-title-rwd">HOME</label>
           </div>
         </div>
       </div>
@@ -97,37 +97,33 @@ nav {
 
 @media screen and (max-width: 767px) {
   nav {
-    width: 55%;
+    width: 100%;
     padding: 10px;
-    height: 7%;
+    height: 10%;
   }
-
   .navbar-nav .nav-link .bi {
     margin-left: 10%;
   }
-
   .nav-link {
     margin-top: -10%;
     width: 100%;
   }
-
   .btn-custom {
     margin-top: 10px;
   }
-
   .btn-img {
-    width: 80%; /* 依據需求調整大小 */
+    width: 80%;
     margin-top: 1%;
   }
   .top-logo {
-    width: 60%; /* 依據需求調整大小 */
+    width: 60%;
     margin-top: 1%;
-    margin-left: 19.5%;
+    margin-left: 22%;
   }
   .header-title {
     font-size: 1.25rem;
-    margin-top: -14%;
-    margin-left: 36%;
+    margin-top: 0%;
+    margin-left: 39%;
     margin-bottom: 0;
   }
   .navbar-nav {
@@ -145,6 +141,16 @@ nav {
     width: 75%;
     margin-top: -10%;
     margin-left: 0%;
+  }
+  .home-pic {
+    width: 120%;
+    margin-top: -100%;
+    margin-left: 11%;
+  }
+  .home-title {
+    font-size: 14px;
+    margin-top: -20%;
+    margin-left: 3%;
   }
 }
 </style>

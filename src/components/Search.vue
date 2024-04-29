@@ -23,8 +23,7 @@
               <div class="row g-3">
                 <div class="col-sm-6">
                   <label for="firstName" class="form-label"
-                    >&nbsp;➢&nbsp;<font class="required">*</font
-                    >&nbsp;預警課程數&nbsp;(&nbsp;即單一學生有幾門課程被預警&nbsp;)&nbsp;≥
+                    >&nbsp;➢&nbsp;<font class="required">*</font>&nbsp;預警課程數&nbsp;≥
                   </label>
                   <input
                     type="text"
@@ -32,7 +31,7 @@
                     @input="inputEarlyWarningCourses = $event.target.value"
                     class="form-control"
                     id="EarlyWarningCourses"
-                    placeholder=""
+                    placeholder="單一學生有幾門課程被預警"
                     value=""
                     required=""
                   />
@@ -42,7 +41,7 @@
                 <div class="col-sm-6">
                   <label for="lastName" class="form-label"
                     >&nbsp;➢&nbsp;<font class="required">*</font
-                    >&nbsp;或預警必修課程數&nbsp;(&nbsp;必修課指選課檔別為必修之課程&nbsp;)</label
+                    >&nbsp;或預警必修課程數</label
                   >
                   <input
                     type="text"
@@ -50,7 +49,7 @@
                     @input="inputEarlyWarningRequiredCourses = $event.target.value"
                     class="form-control"
                     id="EarlyWarningRequiredCourses"
-                    placeholder=""
+                    placeholder="必修課指選課檔別為必修之課程"
                     value=""
                     required=""
                   />
@@ -187,7 +186,6 @@
               <div class="bd-callout bd-callout-warning">
                 <div class="row">
                   <div class="col-md-2">
-                    <!-- <h5 class="h5 mb-4">&nbsp;&nbsp;列印說明</h5> -->
                     <label class="instructions-header">&nbsp;&nbsp;列印說明</label>
                   </div>
                   <div class="col-md-12">
@@ -223,22 +221,37 @@
         </div>
       </main>
     </div>
-
+    <div
+      class="toast"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      ref="toastRef"
+    >
+      <div class="toast-body">
+        「預警課程數&nbsp;/&nbsp;預警必修課程數」至少填寫一項
+        <div class="mt-2 pt-2 border-top">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
     <CopyrightNotice />
     <a href="https://lordicon.com/" class="icon-address">Icons by Lordicon.com</a>
   </body>
 </template>
 
 <script>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import ExcelJS from "exceljs";
 import CopyrightNotice from "../components/CopyrightNotice.vue";
 import axios from "axios";
-import { createStore } from "../store/pinia";
 import { useApiDataStore } from "../store/apiDataStore";
-import Swal from "sweetalert2";
 import sweetAlert from "../components/sweetAlert";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 
 export default {
   name: "Search",
@@ -325,6 +338,10 @@ export default {
 
     watchEffect(() => {
       console.log(selectedDepartment.value);
+    });
+
+    onMounted(() => {
+      showToast();
     });
 
     const buttonSearch = async (event) => {
@@ -579,6 +596,22 @@ export default {
       inputStudentID.value = "";
     };
 
+    const toastRef = ref(null);
+
+    const showToast = () => {
+      if (toastRef.value) {
+        const toast = new bootstrap.Toast(toastRef.value);
+        toast.show();
+      }
+    };
+
+    const hideToast = () => {
+      if (toastRef.value) {
+        const toast = new bootstrap.Toast(toastRef.value);
+        toast.hide();
+      }
+    };
+
     return {
       selectedCollege,
       selectedDepartment,
@@ -592,6 +625,9 @@ export default {
       buttonClear,
       buttonToExcel,
       semesterWarnings,
+      toastRef,
+      showToast,
+      hideToast,
     };
   },
 };

@@ -372,7 +372,6 @@ export default {
     const printSelection = ref([]);
     const searchTerm = ref("");
     const filteredPages = ref([]);
-    const isInputFocused = ref(false);
     const startIndex = ref(1);
     const endIndex = computed(() => {
       return calculateEndIndex();
@@ -583,7 +582,6 @@ export default {
       paginatedData,
       printSelection,
       filteredPages,
-      isInputFocused,
       startIndex,
       endIndex,
       filteredData,
