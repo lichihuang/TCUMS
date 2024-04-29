@@ -118,12 +118,12 @@ nav {
   .top-logo {
     width: 60%;
     margin-top: 1%;
-    margin-left: 22%;
+    margin-left: 21%;
   }
   .header-title {
     font-size: 1.25rem;
     margin-top: 0%;
-    margin-left: 39%;
+    margin-left: 37%;
     margin-bottom: 0;
   }
   .navbar-nav {
@@ -150,7 +150,7 @@ nav {
   .home-title {
     font-size: 14px;
     margin-top: -20%;
-    margin-left: 3%;
+    margin-left: 5%;
   }
 }
 </style>

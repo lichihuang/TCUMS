@@ -646,6 +646,10 @@ export default {
   :root {
     scroll-behavior: smooth;
   }
+  .text-center {
+    margin-top: 20%;
+    text-align: center;
+  }
 }
 :root {
   --bs-blue: #0d6efd;
