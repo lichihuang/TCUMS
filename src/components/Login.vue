@@ -136,22 +136,23 @@ body {
   }
 
   .logo {
-    width: 58%;
-    margin-top: 5%;
-    margin-left: -5%;
+    width: 70%;
+    margin-top: 2%;
+    /* margin-left: -10%; */
+    margin-left: 16%;
   }
 
   .btn-img {
-    width: 32%;
-    margin-top: 15%;
-    margin-left: 8.5%;
+    width: 40%;
+    margin-top: 80%;
+    margin-left: 7.5%;
   }
 
   .stair-img {
-    width: 90%;
+    width: 100%;
     height: 15%;
-    margin-left: -35%;
-    margin-top: 45%;
+    margin-left: -31%;
+    margin-top: 85%;
   }
 }
 </style>

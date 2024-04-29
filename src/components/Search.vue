@@ -152,34 +152,36 @@
                 </div>
                 <div class="col-12 btn-box"></div>
                 <div class="col-3 btn-box"></div>
-                <div class="col-2 btn-box">
-                  <button
-                    @click="buttonSearch"
-                    class="btn-style w-10 btn btn-primary btn-md"
-                    type="submit"
-                  >
-                    查詢
-                  </button>
+                <div class="row">
+                  <div class="col-12 col-md-4 btn-box">
+                    <!-- 这里的 col-md-4 将在中等屏幕及以上显示为一行内的三个按钮 -->
+                    <button
+                      @click="buttonSearch"
+                      class="btn-style w-100 btn btn-primary btn-md"
+                      type="submit"
+                    >
+                      查詢
+                    </button>
+                  </div>
+                  <div class="col-12 col-md-4 btn-box">
+                    <button
+                      @click="buttonToExcel"
+                      class="btn-style w-100 btn btn-primary btn-md"
+                      type="button"
+                    >
+                      匯出Excel
+                    </button>
+                  </div>
+                  <div class="col-12 col-md-4 btn-box">
+                    <button
+                      @click="buttonClear"
+                      class="btn-style w-100 btn btn-primary btn-md"
+                      type="button"
+                    >
+                      清除
+                    </button>
+                  </div>
                 </div>
-                <div class="col-2 btn-box">
-                  <button
-                    @click="buttonToExcel"
-                    class="btn-style w-10 btn btn-primary btn-md"
-                    type="button"
-                  >
-                    匯出Excel
-                  </button>
-                </div>
-                <div class="col-2 btn-box">
-                  <button
-                    @click="buttonClear"
-                    class="btn-style w-10 btn btn-primary btn-md"
-                    type="button"
-                  >
-                    清除
-                  </button>
-                </div>
-                <div class="col-3 btn-box"></div>
               </div>
 
               <hr class="my-4" />
@@ -338,10 +340,6 @@ export default {
 
     watchEffect(() => {
       console.log(selectedDepartment.value);
-    });
-
-    onMounted(() => {
-      showToast();
     });
 
     const buttonSearch = async (event) => {
@@ -596,22 +594,6 @@ export default {
       inputStudentID.value = "";
     };
 
-    const toastRef = ref(null);
-
-    const showToast = () => {
-      if (toastRef.value) {
-        const toast = new bootstrap.Toast(toastRef.value);
-        toast.show();
-      }
-    };
-
-    const hideToast = () => {
-      if (toastRef.value) {
-        const toast = new bootstrap.Toast(toastRef.value);
-        toast.hide();
-      }
-    };
-
     return {
       selectedCollege,
       selectedDepartment,
@@ -625,9 +607,6 @@ export default {
       buttonClear,
       buttonToExcel,
       semesterWarnings,
-      toastRef,
-      showToast,
-      hideToast,
     };
   },
 };
@@ -645,10 +624,6 @@ export default {
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
-  }
-  .text-center {
-    margin-top: 20%;
-    text-align: center;
   }
 }
 :root {

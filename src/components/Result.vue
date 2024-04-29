@@ -559,7 +559,7 @@ export default {
       console.log("SelectAll");
       selectAll.value = true;
       printSelection.value = Array.from(
-        { length: apiDataStore.value.length },
+        { length: apiDataStore.getApiData.length },
         () => true
       );
       console.log(printSelection.value);

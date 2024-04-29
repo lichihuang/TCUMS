@@ -116,9 +116,9 @@ nav {
     margin-top: 1%;
   }
   .top-logo {
-    width: 60%;
+    width: 70%;
     margin-top: 1%;
-    margin-left: 21%;
+    margin-left: 17%;
   }
   .header-title {
     font-size: 1.25rem;
