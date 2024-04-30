@@ -266,7 +266,7 @@ nav {
   .home-title {
     font-size: 14px;
     margin-top: -5%;
-    margin-left: -10%;
+    margin-left: -9%;
   }
 }
 @media (max-width: 576px) {

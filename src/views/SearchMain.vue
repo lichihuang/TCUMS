@@ -18,4 +18,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+@media (max-width: 1200px) {
+}
+@media (max-width: 991px) {
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 575px) {
+}
+</style>

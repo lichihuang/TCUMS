@@ -19,11 +19,42 @@ export default {
   font-size: 0.7rem;
   text-align: center;
 }
-@media (min-width: 768px) {
+
+@media (max-width: 1200px) {
   .footer {
-    position: fixed;
+    /* position: fixed;
     bottom: 1%;
-    width: 100%;
+    width: 100%; */
+    margin-left: 32%;
+    margin-top: -8%;
+  }
+}
+@media (max-width: 991px) {
+  .footer {
+    /* position: fixed;
+    bottom: 1%;
+    width: 100%; */
+    margin-left: 27%;
+    margin-top: -8%;
+  }
+}
+@media (max-width: 769px) {
+  .footer {
+    /* position: fixed;
+    bottom: 1%;
+    width: 100%; */
+    margin-left: 27%;
+    margin-top: -9%;
+    margin-bottom: 50%;
+  }
+}
+@media (max-width: 575) {
+  .footer {
+    /* position: fixed;
+    bottom: 1%;
+    width: 100%; */
+    margin-left: 40%;
+    margin-top: -25%;
   }
 }
 </style>

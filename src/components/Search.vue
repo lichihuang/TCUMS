@@ -637,11 +637,6 @@ export default {
   user-select: none;
 }
 
-/* @media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
-  }
-} */
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -776,10 +771,6 @@ html[屬性樣式] {
 }
 
 @media (max-width: 1200px) {
-}
-@media (max-width: 991px) {
-}
-@media (max-width: 768) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
@@ -788,24 +779,74 @@ html[屬性樣式] {
     margin-left: 7%;
     margin-right: 7%;
   }
-  .body {
-    margin-top: 15%;
+  body {
+    font-size: 1.9rem;
+    margin-top: 10%;
   }
   .search-form {
-    width: 120%;
+    font-size: 1rem;
+    width: 100%;
+    margin-left: auto;
+  }
+}
+@media (max-width: 991px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .instructions-header {
+    font-size: 1.3rem;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  body {
+    margin-top: 8%;
+  }
+  .search-form {
+    margin-left: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 769px) {
+  .search-page-title {
+    margin-left: auto;
+  }
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .instructions-header {
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  body {
+    margin-top: 6%;
+    font-size: 1rem;
+    margin-left: auto;
+  }
+  .search-form {
+    width: auto;
+    margin-left: auto;
   }
 }
 @media (max-width: 575px) {
+  .search-page-title {
+    margin-left: auto;
+  }
   .bd-placeholder-img-lg {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
   .instructions-header {
-    font-size: 1.3rem;
+    /* font-size: 1.3rem; */
     margin-left: 7%;
     margin-right: 7%;
   }
-  .body {
-    margin-top: 15%;
+  body {
+    margin-top: 13%;
+    font-size: 1rem;
+  }
+  .search-form {
+    margin-top: -13%;
+    width: 100%;
+    margin-left: 0%;
   }
 }
 </style>
