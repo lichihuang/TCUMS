@@ -56,7 +56,7 @@
                   <div class="invalid-feedback">Valid last name is required.</div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-4">
                   <label for="address" class="form-label">&nbsp;➢&nbsp;學號</label>
                   <input
                     type="text"
@@ -69,10 +69,9 @@
                   <div class="invalid-feedback">Please enter your shipping address.</div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-5">
                   <label for="address" class="form-label"
-                    >&nbsp;➢&nbsp;<font class="required">*</font
-                    >&nbsp;期中預警之學期</label
+                    >&nbsp;➢&nbsp;<font class="required">*</font>&nbsp;期中預警學期</label
                   >
                   <input
                     type="text"
@@ -86,7 +85,7 @@
                   <div class="invalid-feedback">Please enter your shipping address.</div>
                 </div>
 
-                <div class="col-2">
+                <div class="col-3">
                   <label></label>
                   <div class="form-check">
                     <input
@@ -154,7 +153,6 @@
                 <div class="col-3 btn-box"></div>
                 <div class="row">
                   <div class="col-12 col-md-4 btn-box">
-                    <!-- 这里的 col-md-4 将在中等屏幕及以上显示为一行内的三个按钮 -->
                     <button
                       @click="buttonSearch"
                       class="btn-style w-100 btn btn-primary btn-md"
@@ -201,14 +199,10 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;列印注意事項：
                             <ul class="list-content-unstyled">
                               <li class="custom-line-height">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Chrome：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定目的地：列印&nbsp;⭢&nbsp;<b
-                                  >MicroSoft Print to PDF</b
-                                >；下載PDF&nbsp;⭢&nbsp;<b>另存為PDF</b>。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「顯示更多設定」：紙張大小設為<b>A4</b>，邊界及縮放比例皆設為<b>預設</b>。
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Chrome：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定目的地：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存為PDF。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「顯示更多設定」：紙張大小設為<b>A4</b>，邊界及縮放比例皆設為<b>預設</b>。
                               </li>
                               <li class="custom-line-height">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Edge：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定印表機：列印&nbsp;⭢&nbsp;<b
-                                  >MicroSoft Print to PDF</b
-                                >；下載PDF&nbsp;⭢&nbsp;<b>另存新檔為PDF</b>。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「其他設定」：紙張大小設為<b>A4</b>，比例設為<b>實際大小</b>，邊界設為<b>預設值</b>。
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Edge：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定印表機：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存新檔為PDF。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「其他設定」：紙張大小設為<b>A4</b>，比例設為<b>實際大小</b>，邊界設為<b>預設值</b>。
                               </li>
                             </ul>
                           </li>

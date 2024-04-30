@@ -9,12 +9,12 @@
             </div>
             <div class="s1-address">
               <b
-                ><p>{{ data.warnings[0].address }}</p></b
+                ><p>
+                  {{ data.warnings[0].address }}<br />
+                  {{ data.warnings[0].parent }}&nbsp;先生/女士&nbsp;收
+                </p></b
               >
-              <b> {{ data.warnings[0].parent }}&nbsp;先生/女士&nbsp;收 </b>
             </div>
-          </div>
-          <div class="s1-std">
             <label class="s1-student">
               <span>{{ data.warnings[0].department }}</span
               >-<span>{{ data.warnings[0].degree }}</span
@@ -26,7 +26,8 @@
             </label>
           </div>
         </div>
-        <div class="section2">
+        <div class="section1-bottom-blank"></div>
+        <div class="section2-std-data">
           <div class="s2-content">
             <div class="s2-text">
               <p>{{ data.warnings[0].parent }}家長，您好</p>
@@ -53,7 +54,7 @@
                 ><br />
               </div>
             </div>
-            <label>
+            <label class="s2-std-data">
               班級：<span>{{ departmentName[index] }}&nbsp;</span>
               <span>{{ data.warnings[0].degree }}</span
               >年<span>{{ data.warnings[0].studentClass }}</span
@@ -63,6 +64,8 @@
               姓名：<span>{{ data.warnings[0].studentName }}</span>
             </label>
           </div>
+        </div>
+        <div class="section2-table">
           <div>
             <table class="course-table">
               <thead class="table-header">
@@ -153,7 +156,7 @@ export default {
 
     window.onafterprint = () => {
       if (printInProgress.value) {
-        history.back();
+        //history.back();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
       printInProgress.value = false;
@@ -237,7 +240,7 @@ export default {
 
     function shouldDisplayWarning(data, index) {
       const studentId = data.studentId;
-      printedCounts[studentId] = printedCounts[studentId] || 0; // 初始化計數器
+      printedCounts[studentId] = printedCounts[studentId] || 0;
 
       if (printedCounts[studentId] > 0) {
         return false;
@@ -313,9 +316,13 @@ td {
     margin: 0 auto;
     background-color: white;
   }
+  @page {
+    size: A4;
+    margin-right: 1.5cm;
+    margin-left: 1.5cm;
+  }
 }
 
-/* 用於屏幕上的顯示 */
 @media screen {
   .print-content {
     width: 21cm;
@@ -327,20 +334,31 @@ td {
 
 .section1 {
   width: 100%;
-  height: 9.9cm;
-  border-bottom: 1px solid black;
+  height: 8.5cm;
+  /* border-bottom: 1px dashed black; */
   padding-bottom: 10px;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.section2 {
+.section2-std-data {
   width: 100%;
-  height: 19.8cm;
+  height: 9.9cm;
+  margin-top: 9%;
 }
+.section1-bottom-blank {
+  width: 100%;
+  height: 1.4cm;
+}
+.section2-table {
+  width: 100%;
+  height: 9.9cm;
+}
+
 .s2-content {
-  margin-top: 60px;
+  margin-top: 65px;
+  line-height: 1.2;
 }
 .some-content {
   text-align: right;
@@ -356,7 +374,11 @@ td {
 }
 .course-table {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 9.5px;
+  line-height: 21px;
+}
+.section2-table {
+  margin-top: -30px;
 }
 .s1-std {
   align-self: flex-end;
@@ -368,14 +390,14 @@ td {
 }
 .s1-1 {
   width: 100%;
-  height: 9.9cm;
+  height: 8.5cm;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center;  */
 }
 .s1-student {
-  line-height: 1.3;
+  line-height: 1.2;
+  text-align: right;
 }
 .s2-credit {
   text-align: center;
