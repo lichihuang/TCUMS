@@ -13,7 +13,7 @@
     <div class="container col-md-12 col-lg-12">
       <main>
         <div class="py-5 text-center">
-          <h3>期中預警通知列印</h3>
+          <h3 class="search-page-title">期中預警通知列印</h3>
           <hr />
         </div>
 
@@ -185,29 +185,51 @@
               <hr class="my-4" />
               <div class="bd-callout bd-callout-warning">
                 <div class="row">
-                  <div class="col-md-2">
-                    <label class="instructions-header">&nbsp;&nbsp;列印說明</label>
+                  <div class="col-md-6">
+                    <label class="instructions-header">☞&nbsp;&nbsp;列印說明</label>
                   </div>
                   <div class="col-md-12">
-                    <div class="row">
-                      <div class="col-md-12 col-sm-12">
-                        <ul class="list-unstyled">
-                          <li>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)&nbsp;系統將列印出指定之期中預警及課程數學生名單，供使用者選擇確定列印範圍
-                          </li>
-                          <li>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;列印注意事項：
-                            <ul class="list-content-unstyled">
-                              <li class="custom-line-height">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Chrome：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定目的地：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存為PDF。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「顯示更多設定」：紙張大小設為<b>A4</b>，邊界及縮放比例皆設為<b>預設</b>。
-                              </li>
-                              <li class="custom-line-height">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▪&nbsp;&nbsp;&nbsp;&nbsp;Edge：<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;設定印表機：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存新檔為PDF。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;點選「其他設定」：紙張大小設為<b>A4</b>，比例設為<b>實際大小</b>，邊界設為<b>預設值</b>。
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
+                    <div class="list-content-unstyled">
+                      <ol class="instructions-table">
+                        <li>
+                          系統將列印出指定之期中預警及課程數學生名單，供使用者選擇確定列印範圍
+                        </li>
+                        <li>
+                          列印注意事項：
+                          <table class="attention-table">
+                            <tr>
+                              <td>▪&nbsp;&nbsp;Chrome：</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <ol>
+                                  <li>
+                                    設定目的地：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存為PDF。
+                                  </li>
+                                  <li>
+                                    點選「顯示更多設定」：紙張大小設為&nbsp;<b>A4</b>，邊界及縮放比例皆設為<b>預設</b>。
+                                  </li>
+                                </ol>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>▪&nbsp;&nbsp;Edge：</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <ol>
+                                  <li>
+                                    設定印表機：列印&nbsp;⭢&nbsp;選擇印表機；下載PDF&nbsp;⭢&nbsp;另存新檔為PDF。
+                                  </li>
+                                  <li>
+                                    點選「其他設定」：紙張大小設為&nbsp;<b>A4</b>，比例設為<b>實際大小</b>，邊界設為<b>預設值</b>。
+                                  </li>
+                                </ol>
+                              </td>
+                            </tr>
+                          </table>
+                        </li>
+                      </ol>
                     </div>
                   </div>
                 </div>
@@ -615,11 +637,11 @@ export default {
   user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
   }
-}
+} */
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -697,7 +719,7 @@ html[屬性樣式] {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1.7%;
+  margin-top: 1.2%;
 }
 .icon-address {
   font-size: 7px;
@@ -729,22 +751,61 @@ html[屬性樣式] {
 .list-content-unstyled {
   list-style-type: none;
   text-align: left;
-  line-height: 1.8;
-  margin-left: -2%;
+  line-height: 1.5;
+  margin-left: 4%;
+  margin-bottom: -2%;
+  margin-top: 0.5%;
 }
 .custom-line-height {
   line-height: 1.5;
 }
 .instructions-header {
   font-size: 1.3rem;
+  margin-left: 8%;
+  margin-right: 10%;
+}
+.instructions-table {
+  margin-left: 1%;
+  margin-right: 10%;
+}
+.attention-table {
+  margin-left: -1%;
 }
 .required {
   color: #d40000;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 575px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
+  .instructions-header {
+    font-size: 1.3rem;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  .body {
+    margin-top: 15%;
+  }
+}
+@media (max-width: 768) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .instructions-header {
+    font-size: 1.3rem;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  .body {
+    margin-top: 15%;
+  }
+  .search-form {
+    width: 120%;
+  }
+}
+@media (max-width: 991px) {
+}
+@media (max-width: 1200px) {
 }
 </style>

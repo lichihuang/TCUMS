@@ -95,7 +95,7 @@ nav {
   margin-top: 25%;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 1200px) {
   nav {
     width: 100%;
     padding: 10px;
@@ -118,12 +118,186 @@ nav {
   .top-logo {
     width: 70%;
     margin-top: 1%;
-    margin-left: 17%;
+    margin-left: 3%;
   }
   .header-title {
-    font-size: 1.25rem;
+    font-size: 1.8rem;
+    margin-top: 6%;
+    margin-left: -78%;
+    margin-bottom: 0;
+  }
+  .navbar-nav {
+    font-size: 0.3rem;
+  }
+  .d-flex .flex-column {
+    width: 80%;
+    margin-top: 10%;
+  }
+  .navbar-nav {
+    margin-top: 30%;
+    width: 120%;
+  }
+  .d-flex .flex-column {
+    width: 75%;
+    margin-top: -10%;
+    margin-left: 0%;
+  }
+  .home-pic {
+    width: 500%;
+    margin-top: 40%;
+    margin-left: -200%;
+  }
+  .home-title {
+    font-size: 14px;
+    margin-top: -10%;
+    margin-left: -13%;
+  }
+}
+@media (max-width: 991px) {
+  nav {
+    width: 100%;
+    padding: 10px;
+    height: 8%;
+  }
+  .navbar-nav .nav-link .bi {
+    margin-left: 10%;
+  }
+  .nav-link {
+    margin-top: -10%;
+    width: 100%;
+  }
+  .btn-custom {
+    margin-top: 10px;
+  }
+  .btn-img {
+    width: 80%;
+    margin-top: 1%;
+  }
+  .top-logo {
+    width: 70%;
+    margin-top: 1%;
+    margin-left: 3%;
+  }
+  .header-title {
+    font-size: 1.8rem;
+    margin-top: 4%;
+    margin-left: -65%;
+    margin-bottom: 0;
+  }
+  .navbar-nav {
+    font-size: 0.3rem;
+  }
+  .d-flex .flex-column {
+    width: 80%;
+    margin-top: 10%;
+  }
+  .navbar-nav {
+    margin-top: 30%;
+    width: 120%;
+  }
+  .d-flex .flex-column {
+    width: 75%;
+    margin-top: -10%;
+    margin-left: 0%;
+  }
+  .home-pic {
+    width: 145%;
+    margin-top: 20%;
+    margin-left: -19%;
+  }
+  .home-title {
+    font-size: 14px;
+    margin-top: -20%;
+    margin-left: -10%;
+  }
+}
+@media (max-width: 776px) {
+  nav {
+    width: 100%;
+    padding: 10px;
+    height: 10%;
+  }
+  .navbar-nav .nav-link .bi {
+    margin-left: 10%;
+  }
+  .nav-link {
+    margin-top: -10%;
+    width: 100%;
+  }
+  .btn-custom {
+    margin-top: 10px;
+  }
+  .btn-img {
+    width: 80%;
+    margin-top: 1%;
+  }
+  .top-logo {
+    width: 70%;
+    margin-top: 1%;
+    margin-left: 2%;
+  }
+  .header-title {
+    font-size: 1.5rem;
+    margin-top: 7%;
+    margin-left: -95%;
+    margin-bottom: 0;
+  }
+  .navbar-nav {
+    font-size: 0.3rem;
+  }
+  .d-flex .flex-column {
+    width: 80%;
+    margin-top: 10%;
+  }
+  .navbar-nav {
+    margin-top: 30%;
+    width: 120%;
+  }
+  .d-flex .flex-column {
+    width: 75%;
+    margin-top: -10%;
+    margin-left: 0%;
+  }
+  .home-pic {
+    width: 200%;
+    margin-top: 20%;
+    margin-left: -40%;
+  }
+  .home-title {
+    font-size: 14px;
+    margin-top: -5%;
+    margin-left: -10%;
+  }
+}
+@media (max-width: 576px) {
+  nav {
+    width: 100%;
+    padding: 10px;
+    height: 10%;
+  }
+  .navbar-nav .nav-link .bi {
+    margin-left: 10%;
+  }
+  .nav-link {
+    margin-top: -10%;
+    width: 100%;
+  }
+  .btn-custom {
+    margin-top: 10px;
+  }
+  .btn-img {
+    width: 50%;
+    margin-top: 1%;
+  }
+  .top-logo {
+    width: 70%;
+    margin-top: 1%;
+    margin-left: 0%;
+  }
+  .header-title {
+    font-size: 1.3rem;
     margin-top: 0%;
-    margin-left: 37%;
+    margin-left: 0%;
     margin-bottom: 0;
   }
   .navbar-nav {
@@ -144,7 +318,7 @@ nav {
   }
   .home-pic {
     width: 120%;
-    margin-top: -100%;
+    margin-top: -140%;
     margin-left: 11%;
   }
   .home-title {
@@ -153,4 +327,6 @@ nav {
     margin-left: 5%;
   }
 }
+
+/* min：小到大；max：大到小 */
 </style>
