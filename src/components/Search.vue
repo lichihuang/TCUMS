@@ -775,18 +775,9 @@ html[屬性樣式] {
   color: #d40000;
 }
 
-@media (max-width: 575px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .instructions-header {
-    font-size: 1.3rem;
-    margin-left: 7%;
-    margin-right: 7%;
-  }
-  .body {
-    margin-top: 15%;
-  }
+@media (max-width: 1200px) {
+}
+@media (max-width: 991px) {
 }
 @media (max-width: 768) {
   .bd-placeholder-img-lg {
@@ -804,8 +795,17 @@ html[屬性樣式] {
     width: 120%;
   }
 }
-@media (max-width: 991px) {
-}
-@media (max-width: 1200px) {
+@media (max-width: 575px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .instructions-header {
+    font-size: 1.3rem;
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+  .body {
+    margin-top: 15%;
+  }
 }
 </style>

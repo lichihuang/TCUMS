@@ -127,8 +127,85 @@ body {
   margin-left: -60%;
   margin-bottom: -45%;
 }
+@media (max-width: 1200px) {
+  .full-height {
+    height: auto;
+    margin: 0;
+    padding: 10px;
+  }
 
-@media screen and (max-width: 767px) {
+  .logo {
+    width: 120%;
+    margin-top: 10%;
+    margin-left: -50%;
+  }
+
+  .btn-img {
+    width: 50%;
+    margin-top: 20%;
+    margin-left: -25%;
+  }
+
+  .stair-img {
+    width: 170%;
+    height: 15%;
+    margin-left: -80%;
+    margin-top: 40%;
+  }
+}
+@media (max-width: 991px) {
+  .full-height {
+    height: auto;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .logo {
+    width: 120%;
+    margin-top: 10%;
+    margin-left: -50%;
+  }
+
+  .btn-img {
+    width: 50%;
+    margin-top: 20%;
+    margin-left: -25%;
+  }
+
+  .stair-img {
+    width: 170%;
+    height: 15%;
+    margin-left: -80%;
+    margin-top: 50%;
+  }
+}
+@media screen and (max-width: 769px) {
+  .full-height {
+    height: auto;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .logo {
+    width: 100%;
+    margin-top: 10%;
+    margin-left: -50%;
+  }
+
+  .btn-img {
+    width: 50%;
+    margin-top: 20%;
+    margin-left: -25%;
+  }
+
+  .stair-img {
+    width: 170%;
+    height: 15%;
+    margin-left: -80%;
+    margin-top: 50%;
+  }
+}
+@media (max-width: 575px) {
   .full-height {
     height: auto;
     margin: 0;
@@ -137,22 +214,21 @@ body {
 
   .logo {
     width: 70%;
-    margin-top: 2%;
-    /* margin-left: -10%; */
+    margin-top: 3%;
     margin-left: 16%;
   }
 
   .btn-img {
-    width: 40%;
-    margin-top: 80%;
-    margin-left: 7.5%;
+    width: 41%;
+    margin-top: 40%;
+    margin-left: 3%;
   }
 
   .stair-img {
     width: 100%;
     height: 15%;
     margin-left: -31%;
-    margin-top: 85%;
+    margin-top: 27.5%;
   }
 }
 </style>
