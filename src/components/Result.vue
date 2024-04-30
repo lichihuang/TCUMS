@@ -146,7 +146,7 @@
               <div>
                 <div class="pagination">
                   <span class="rows-per-page">頁面筆數：</span>
-                  <select v-model="itemsPerPage">
+                  <select class="perpage-size" v-model="itemsPerPage">
                     <option v-for="option in pageOptions" :key="option">
                       {{ option }}
                     </option>
@@ -842,17 +842,148 @@ select {
 .tch-insert-text {
   line-height: 3;
 }
-
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-}
-
 .news-border {
   width: 30px;
   height: 2px;
   margin: 10px 0;
   transition: all 0.4s;
+}
+
+@media (max-width: 1200px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .container {
+    margin-top: 13.5%;
+    /* margin-left: center; */
+  }
+  .perpage-size {
+    width: 80%;
+  }
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .resultPage-btn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .resultPage-btn button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    display: inline-block;
+    justify-content: center;
+  }
+
+  .pagination-button {
+    margin-left: 10px;
+    justify-content: center;
+  }
+}
+@media (max-width: 991px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .container {
+    margin-top: 13.5%;
+    margin-left: center;
+  }
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .resultPage-btn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .resultPage-btn button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    display: inline-block;
+    justify-content: center;
+  }
+
+  .pagination-button {
+    margin-left: 10px;
+    justify-content: center;
+  }
+}
+@media (max-width: 769px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .container {
+    margin-top: 11.5%;
+  }
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .resultPage-btn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .resultPage-btn button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    display: inline-block;
+    justify-content: center;
+  }
+
+  .pagination-button {
+    margin-left: 10px;
+    justify-content: center;
+  }
+}
+@media (max-width: 575px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+  .resultPage-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .resultPage-btn > * {
+    margin-bottom: 5px;
+  }
+  .container {
+    margin-top: 18.5%;
+  }
 }
 </style>

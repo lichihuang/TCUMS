@@ -48,12 +48,12 @@ export default {
     margin-bottom: 50%;
   }
 }
-@media (max-width: 575) {
+@media (max-width: 575px) {
   .footer {
     /* position: fixed;
     bottom: 1%;
     width: 100%; */
-    margin-left: 40%;
+    margin-left: 20%;
     margin-top: -25%;
   }
 }

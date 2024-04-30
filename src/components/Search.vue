@@ -802,8 +802,8 @@ html[屬性樣式] {
     margin-top: 8%;
   }
   .search-form {
-    margin-left: auto;
-    width: 100%;
+    margin-left: center;
+    width: auto;
   }
 }
 @media (max-width: 769px) {
