@@ -22,20 +22,16 @@ export default {
 
 @media (max-width: 1200px) {
   .footer {
-    /* position: fixed;
-    bottom: 1%;
-    width: 100%; */
-    margin-left: 32%;
-    margin-top: -8%;
+    position: fixed;
+    font-size: 0.7rem;
+    text-align: center;
   }
 }
 @media (max-width: 991px) {
   .footer {
-    /* position: fixed;
-    bottom: 1%;
-    width: 100%; */
-    margin-left: 27%;
-    margin-top: -8%;
+    position: fixed;
+    font-size: 0.7rem;
+    text-align: center;
   }
 }
 @media (max-width: 769px) {

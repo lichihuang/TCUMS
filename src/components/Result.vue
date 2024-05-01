@@ -146,7 +146,7 @@
               <div>
                 <div class="pagination">
                   <span class="rows-per-page">頁面筆數：</span>
-                  <select class="perpage-size" v-model="itemsPerPage">
+                  <select v-model="itemsPerPage">
                     <option v-for="option in pageOptions" :key="option">
                       {{ option }}
                     </option>
@@ -207,7 +207,12 @@
     </main>
   </div>
   <PageController />
-  <CopyrightNotice />
+  <div class="footer-copyright">
+    <p class="mb-0">
+      CopyRight © 2024 -
+      <a href="index.html">Tzu Chi University Computer Center, All Right Reserved</a>.
+    </p>
+  </div>
   <a href="https://lordicon.com/" class="icon-address">Icons by Lordicon.com</a>
 </template>
 
@@ -215,10 +220,10 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useApiDataStore } from "../store/apiDataStore";
-import CopyrightNotice from "../components/CopyrightNotice.vue";
 import PageController from "../components/PageController.vue";
 import PrintContent from "./PrintContent.vue";
 import print from "vue3-print-nb";
+import sweetAlert from "../components/sweetAlert";
 
 import { Input, initMDB } from "mdb-ui-kit";
 initMDB({ Input });
@@ -226,7 +231,6 @@ initMDB({ Input });
 export default {
   name: "Result",
   components: {
-    CopyrightNotice,
     PageController,
     PrintContent,
   },
@@ -369,7 +373,8 @@ export default {
     const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
 
     const resultTitle = ref("");
-    const printSelection = ref([]);
+    /* const printSelection = ref([]); */
+    const printSelection = ref({});
     const searchTerm = ref("");
     const filteredPages = ref([]);
     const startIndex = ref(1);
@@ -377,19 +382,61 @@ export default {
       return calculateEndIndex();
     });
 
-    const toggleCheckbox = (index) => {
+    /* const toggleCheckbox = (index) => {
       printSelection.value[index] = !printSelection.value[index];
     };
 
     const handleCheckboxClick = (event, index) => {
       toggleCheckbox(index);
+    }; */
+
+    const toggleCheckbox = (dataIndex) => {
+      // 計算資料在整個資料集中的索引
+      const globalIndex = (currentPage.value - 1) * itemsPerPage.value + dataIndex;
+      // 確保 printSelection 的值是一個物件
+      if (!isObject(printSelection.value)) {
+        printSelection.value = {};
+      }
+      // 切換勾選狀態
+      printSelection.value = {
+        ...printSelection.value,
+        [globalIndex]: !printSelection.value[globalIndex],
+      };
+    };
+
+    // 檢查是否為物件
+    const isObject = (value) => {
+      return value && typeof value === "object" && value.constructor === Object;
+    };
+
+    // 修改 handleCheckboxClick 函式，以傳遞資料索引而不是顯示索引
+    const handleCheckboxClick = (event, dataIndex) => {
+      toggleCheckbox(dataIndex);
     };
 
     const apiDataStore = useApiDataStore();
 
-    const changePageSize = (value) => {
+    /* const changePageSize = (value) => {
       itemsPerPage.value = parseInt(value);
       calculateEndIndex();
+    }; */
+
+    const changePageSize = (value) => {
+      const prevPageSize = itemsPerPage.value;
+      itemsPerPage.value = parseInt(value);
+
+      // 計算前一個頁面顯示資料筆數與新的頁面顯示資料筆數之間的比例
+      const ratio = itemsPerPage.value / prevPageSize;
+
+      // 調整 printSelection 物件中保存的索引值，以反映新的頁面顯示資料筆數
+      printSelection.value = Object.keys(printSelection.value).reduce((acc, index) => {
+        const newIndex = Math.floor(index / ratio);
+        acc[newIndex] = printSelection.value[index];
+        return acc;
+      }, {});
+
+      // 重新計算頁面的起始索引
+      calculateStartAndEndIndex();
     };
 
     const selectAll = ref(false);
@@ -466,10 +513,28 @@ export default {
       calculateStartAndEndIndex();
     });
 
+    watch(
+      currentPage,
+      () => {
+        const startIdx = (currentPage.value - 1) * itemsPerPage.value;
+        const endIdx = currentPage.value * itemsPerPage.value;
+        const displayedIndexes = Object.keys(printSelection.value).map(Number);
+
+        const newDataIndexes = displayedIndexes.filter(
+          (idx) => idx >= startIdx && idx < endIdx
+        );
+        printSelection.value = newDataIndexes.reduce((acc, idx) => {
+          acc[idx] = printSelection.value[idx];
+          return acc;
+        }, {});
+      },
+      { immediate: true }
+    );
+
     const filteredData = computed(() => {
       const regex = new RegExp(searchTerm.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
-        // 检查每个字段是否包含搜索词
+        s;
         return Object.values(item).some((value) => regex.test(value));
       });
     });
@@ -497,7 +562,7 @@ export default {
         const searchData = await fetchSearchData();
         console.log("搜索结果长度：", searchData.length);
         totalItems.value = searchData.length;
-        resetVariables(); // 重置变量
+        resetVariables();
       } catch (error) {
         console.error("搜索发生错误：", error);
       }
@@ -533,7 +598,7 @@ export default {
 
     const showPrintContent = ref(false);
 
-    const handlePrint = async () => {
+    /* const handlePrint = async () => {
       console.log("Print！");
       console.log("printSelection：", printSelection.value);
 
@@ -552,6 +617,30 @@ export default {
         await router.push({ name: "PrintContent" });
       } else {
         console.error("printSelection is not an array or is empty!");
+      }
+    }; */
+
+    const handlePrint = async () => {
+      console.log("Print！");
+      console.log("printSelection：", printSelection.value);
+
+      const selectedIndexes = Object.keys(printSelection.value).filter(
+        (displayIndex) => printSelection.value[displayIndex]
+      );
+
+      if (Array.isArray(selectedIndexes) && selectedIndexes.length > 0) {
+        // 使用選取的顯示索引從原始資料中獲取被選取的資料
+        const selectedData = selectedIndexes.map((displayIndex) =>
+          JSON.parse(JSON.stringify(apiDataStore.getApiData[displayIndex]))
+        );
+        console.log("Selected Data:", selectedData);
+        apiDataStore.setSelectedData(selectedData);
+        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
+        console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
+        await router.push({ name: "PrintContent" });
+      } else {
+        console.error("printSelection is not an array or is empty!");
+        sweetAlert.typicalType("注意", "沒有勾選資料唷！", "warning", `OK`);
       }
     };
 
@@ -807,6 +896,11 @@ tr.floating-row:hover {
 .rows-per-page {
   font-size: 0.95rem;
   color: #343a40;
+}
+.footer-copyright {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: -2%;
 }
 select {
   border: none;

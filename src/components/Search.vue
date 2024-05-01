@@ -255,7 +255,12 @@
         </div>
       </div>
     </div>
-    <CopyrightNotice />
+    <div class="footer-copyright">
+      <p class="mb-0">
+        CopyRight © 2024 -
+        <a href="index.html">Tzu Chi University Computer Center, All Right Reserved</a>.
+      </p>
+    </div>
     <a href="https://lordicon.com/" class="icon-address">Icons by Lordicon.com</a>
   </body>
 </template>
@@ -264,7 +269,6 @@
 import { ref, computed, watchEffect, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import ExcelJS from "exceljs";
-import CopyrightNotice from "../components/CopyrightNotice.vue";
 import axios from "axios";
 import { useApiDataStore } from "../store/apiDataStore";
 import sweetAlert from "../components/sweetAlert";
@@ -273,9 +277,7 @@ import "bootstrap";
 
 export default {
   name: "Search",
-  components: {
-    CopyrightNotice,
-  },
+  components: {},
   setup() {
     const router = useRouter();
 
@@ -721,6 +723,11 @@ html[屬性樣式] {
   position: fixed;
   top: 905px;
   left: 1820px;
+}
+.footer-copyright {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: -7.5%;
 }
 .bd-callout-warning {
   --bd-callout-color: var(--bs-warning-text-emphasis);
