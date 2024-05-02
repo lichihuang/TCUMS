@@ -18,6 +18,7 @@ export default {
   position: fixed;
   font-size: 0.7rem;
   text-align: center;
+  margin-left: 41%;
 }
 
 @media (max-width: 1200px) {

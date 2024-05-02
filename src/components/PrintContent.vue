@@ -107,6 +107,7 @@
 import { useApiDataStore } from "../store/apiDataStore";
 import { ref, computed, onMounted, watch } from "vue";
 import print from "vue3-print-nb";
+import { deptName } from "../components/TransformData.js";
 
 export default {
   name: "Print",
@@ -156,71 +157,13 @@ export default {
 
     window.onafterprint = () => {
       if (printInProgress.value) {
-        //history.back();
+        history.back();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
       printInProgress.value = false;
     };
 
     updateCurrentDate();
-
-    const deptName = {
-      201: "國際服務產業管理學士學位學程",
-      203: "國際數位媒體科技學士學位學程",
-      204: "外國語文學系",
-      235: "永續暨防災碩士學位學程",
-      300: "醫學院-大學部",
-      301: "醫學系",
-      302: "醫學檢驗生物技術學系",
-      303: "公共衛生學系",
-      304: "護理學系",
-      305: "醫學資訊學系",
-      307: "物理治療學系",
-      308: "學士後中醫學系",
-      309: "生物醫學暨工程學系",
-      321: "護理學系碩士班",
-      323: "醫學檢驗生物技術學系碩士班",
-      324: "公共衛生學系碩士班",
-      325: "醫學資訊學系碩士班",
-      331: "物理治療學系碩士班",
-      333: "生物醫學碩士班",
-      334: "臨床藥學研究所",
-      337: "生物醫學暨工程學系碩士班",
-      338: "學士後中醫學系碩士班",
-      353: "醫學科學博士班",
-      354: "轉役醫學博士學位學程",
-      398: "醫學院-碩士班",
-      500: "人文社會學院-大學部",
-      501: "社會工作學系",
-      502: "傳播學系",
-      506: "人類發展與心理學系",
-      521: "傳播學系碩士班",
-      522: "社會工作學系碩士班",
-      525: "東方語文學系碩士班",
-      526: "宗教與人文研究所",
-      532: "人類發展與心理學系碩士班臨床心理學組",
-      534: "東方語文學系中文組",
-      535: "東方語文學系日文組",
-      600: "國際暨跨領域學院-大學部",
-      610: "國際暨跨領域學院-碩士班",
-      622: "教育研究所碩士在職專班",
-      623: "護理學系碩士在職專班",
-      702: "分子生物暨人類遺傳學系",
-      721: "藥理暨毒理學碩士班",
-      727: "分子生物暨人類遺傳學系碩士班",
-      752: "藥理暨毒理學博士班",
-      800: "教育傳播學院-大學部",
-      801: "兒童發展與家庭教育學系",
-      821: "健康傳播專題研究",
-      831: "媒體製作暨教學中心",
-      901: "通識教育中心",
-      902: "體育教學中心",
-      922: "師資培育中心",
-      924: "外語教學中心",
-      931: "華語教材教法",
-      932: "社會工作學系碩士班",
-      "": "未知科系",
-    };
 
     const departmentName = computed(() => {
       if (!selectedDataArray.value.length) return [];
@@ -278,128 +221,5 @@ export default {
 </script>
 
 <style scoped>
-body {
-  font-family: "標楷體", "Microsoft JhengHei", sans-serif;
-}
-.print-content {
-  @page {
-    size: A4;
-  }
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  font-family: "標楷體", "Microsoft JhengHei", sans-serif;
-}
-table {
-  border-collapse: collapse;
-}
-
-table,
-th,
-td {
-  border: 1px solid black;
-  vertical-align: middle;
-}
-
-@page {
-  margin-bottom: 0mm;
-  margin-top: 0mm;
-}
-
-@media print {
-  .print-content {
-    width: 100%;
-    height: 29.7cm;
-    margin: 0 auto;
-    background-color: white;
-  }
-  @page {
-    size: A4;
-    margin-right: 1.5cm;
-    margin-left: 1.5cm;
-  }
-}
-
-@media screen {
-  .print-content {
-    width: 21cm;
-    height: 29.7cm;
-    margin: 0 auto;
-    background-color: white;
-  }
-}
-
-.section1 {
-  width: 100%;
-  height: 8.5cm;
-  /* border-bottom: 1px dashed black; */
-  padding-bottom: 10px;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.section2-std-data {
-  width: 100%;
-  height: 9.9cm;
-  margin-top: 9%;
-}
-.section1-bottom-blank {
-  width: 100%;
-  height: 1.4cm;
-}
-.section2-table {
-  width: 100%;
-  height: 9.9cm;
-}
-
-.s2-content {
-  margin-top: 65px;
-  line-height: 1.2;
-}
-.some-content {
-  text-align: right;
-  margin-right: 0px;
-}
-.table-header {
-  text-align: center;
-}
-.header {
-  text-align: center;
-  /* justify-content: center;
-  align-items: center; */
-}
-.course-table {
-  width: 100%;
-  margin-top: 9.5px;
-  line-height: 21px;
-}
-.section2-table {
-  margin-top: -30px;
-}
-.s1-std {
-  align-self: flex-end;
-  text-align: right;
-  color: rgb(160, 160, 160);
-}
-.s1-address {
-  text-align: center;
-}
-.s1-1 {
-  width: 100%;
-  height: 8.5cm;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.s1-student {
-  line-height: 1.2;
-  text-align: right;
-}
-.s2-credit {
-  text-align: center;
-}
+@import "../style/PrintContentStyle.css";
 </style>

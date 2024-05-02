@@ -146,7 +146,7 @@
               <div>
                 <div class="pagination">
                   <span class="rows-per-page">頁面筆數：</span>
-                  <select v-model="itemsPerPage">
+                  <select class="perpage-size" v-model="itemsPerPage">
                     <option v-for="option in pageOptions" :key="option">
                       {{ option }}
                     </option>
@@ -207,12 +207,7 @@
     </main>
   </div>
   <PageController />
-  <div class="footer-copyright">
-    <p class="mb-0">
-      CopyRight © 2024 -
-      <a href="index.html">Tzu Chi University Computer Center, All Right Reserved</a>.
-    </p>
-  </div>
+  <CopyrightNotice class="copyright" />
   <a href="https://lordicon.com/" class="icon-address">Icons by Lordicon.com</a>
 </template>
 
@@ -220,10 +215,11 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useApiDataStore } from "../store/apiDataStore";
+import CopyrightNotice from "../components/CopyrightNotice.vue";
 import PageController from "../components/PageController.vue";
 import PrintContent from "./PrintContent.vue";
 import print from "vue3-print-nb";
-import sweetAlert from "../components/sweetAlert";
+import { deptName, stdState } from "../components/TransformData.js";
 
 import { Input, initMDB } from "mdb-ui-kit";
 initMDB({ Input });
@@ -231,6 +227,7 @@ initMDB({ Input });
 export default {
   name: "Result",
   components: {
+    CopyrightNotice,
     PageController,
     PrintContent,
   },
@@ -245,6 +242,17 @@ export default {
       const dataToCount = searchTerm.value ? filteredData.value : apiDataStore.getApiData;
       return dataToCount ? dataToCount.length : 0;
     });
+    const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
+    const resultTitle = ref("");
+    const printSelection = ref([]);
+    const searchTerm = ref("");
+    const filteredPages = ref([]);
+    const startIndex = ref(1);
+    const endIndex = computed(() => {
+      return calculateEndIndex();
+    });
+
+    const apiDataStore = useApiDataStore();
 
     const formatDate = (timeString) => {
       const date = new Date(timeString);
@@ -255,63 +263,6 @@ export default {
       const minutes = String(date.getMinutes()).padStart(2, "0");
       const seconds = String(date.getSeconds()).padStart(2, "0");
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-    };
-
-    const deptName = {
-      201: "國際服務產業管理學士學位學程",
-      203: "國際數位媒體科技學士學位學程",
-      204: "外國語文學系",
-      235: "永續暨防災碩士學位學程",
-      300: "醫學院-大學部",
-      301: "醫學系",
-      302: "醫學檢驗生物技術學系",
-      303: "公共衛生學系",
-      304: "護理學系",
-      305: "醫學資訊學系",
-      307: "物理治療學系",
-      308: "學士後中醫學系",
-      309: "生物醫學暨工程學系",
-      321: "護理學系碩士班",
-      323: "醫學檢驗生物技術學系碩士班",
-      324: "公共衛生學系碩士班",
-      325: "醫學資訊學系碩士班",
-      331: "物理治療學系碩士班",
-      333: "生物醫學碩士班",
-      334: "臨床藥學研究所",
-      337: "生物醫學暨工程學系碩士班",
-      338: "學士後中醫學系碩士班",
-      353: "醫學科學博士班",
-      354: "轉役醫學博士學位學程",
-      398: "醫學院-碩士班",
-      500: "人文社會學院-大學部",
-      501: "社會工作學系",
-      502: "傳播學系",
-      506: "人類發展與心理學系",
-      521: "傳播學系碩士班",
-      522: "社會工作學系碩士班",
-      525: "東方語文學系碩士班",
-      526: "宗教與人文研究所",
-      532: "人類發展與心理學系碩士班臨床心理學組",
-      534: "東方語文學系中文組",
-      535: "東方語文學系日文組",
-      600: "國際暨跨領域學院-大學部",
-      610: "國際暨跨領域學院-碩士班",
-      622: "教育研究所碩士在職專班",
-      623: "護理學系碩士在職專班",
-      702: "分子生物暨人類遺傳學系",
-      721: "藥理暨毒理學碩士班",
-      727: "分子生物暨人類遺傳學系碩士班",
-      752: "藥理暨毒理學博士班",
-      800: "教育傳播學院-大學部",
-      801: "兒童發展與家庭教育學系",
-      821: "健康傳播專題研究",
-      831: "媒體製作暨教學中心",
-      901: "通識教育中心",
-      902: "體育教學中心",
-      922: "師資培育中心",
-      924: "外語教學中心",
-      931: "華語教材教法",
-      932: "社會工作學系碩士班",
     };
 
     const departmentName = computed(() => {
@@ -340,21 +291,6 @@ export default {
       return result;
     });
 
-    const stdState = {
-      "01": "在學",
-      "02": "休學",
-      "03": "退學",
-      "04": "保留學籍",
-      "05": "畢業",
-      "07": "未入學",
-      "09": "交換結束",
-      10: "放棄入學",
-      11: "撤銷學籍",
-      12: "先修結束",
-      13: "研修結束",
-      99: "不升級",
-    };
-
     const studentState = computed(() => {
       const result = [];
       for (const item of paginatedData.value) {
@@ -370,83 +306,6 @@ export default {
       return result;
     });
 
-    const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
-
-    const resultTitle = ref("");
-    /* const printSelection = ref([]); */
-    const printSelection = ref({});
-    const searchTerm = ref("");
-    const filteredPages = ref([]);
-    const startIndex = ref(1);
-    const endIndex = computed(() => {
-      return calculateEndIndex();
-    });
-
-    /* const toggleCheckbox = (index) => {
-      printSelection.value[index] = !printSelection.value[index];
-    };
-
-    const handleCheckboxClick = (event, index) => {
-      toggleCheckbox(index);
-    }; */
-
-    const toggleCheckbox = (dataIndex) => {
-      // 計算資料在整個資料集中的索引
-      const globalIndex = (currentPage.value - 1) * itemsPerPage.value + dataIndex;
-      // 確保 printSelection 的值是一個物件
-      if (!isObject(printSelection.value)) {
-        printSelection.value = {};
-      }
-      // 切換勾選狀態
-      printSelection.value = {
-        ...printSelection.value,
-        [globalIndex]: !printSelection.value[globalIndex],
-      };
-    };
-
-    // 檢查是否為物件
-    const isObject = (value) => {
-      return value && typeof value === "object" && value.constructor === Object;
-    };
-
-    // 修改 handleCheckboxClick 函式，以傳遞資料索引而不是顯示索引
-    const handleCheckboxClick = (event, dataIndex) => {
-      toggleCheckbox(dataIndex);
-    };
-
-    const apiDataStore = useApiDataStore();
-
-    /* const changePageSize = (value) => {
-      itemsPerPage.value = parseInt(value);
-      calculateEndIndex();
-    }; */
-
-    const changePageSize = (value) => {
-      const prevPageSize = itemsPerPage.value;
-      itemsPerPage.value = parseInt(value);
-
-      // 計算前一個頁面顯示資料筆數與新的頁面顯示資料筆數之間的比例
-      const ratio = itemsPerPage.value / prevPageSize;
-
-      // 調整 printSelection 物件中保存的索引值，以反映新的頁面顯示資料筆數
-      printSelection.value = Object.keys(printSelection.value).reduce((acc, index) => {
-        const newIndex = Math.floor(index / ratio);
-        acc[newIndex] = printSelection.value[index];
-        return acc;
-      }, {});
-
-      // 重新計算頁面的起始索引
-      calculateStartAndEndIndex();
-    };
-
-    const selectAll = ref(false);
-
-    function resetVariables() {
-      currentPage.value = 1;
-      startIndex.value = 1;
-      calculateEndIndex();
-    }
-
     onMounted(async () => {
       if (router.params) {
         const { semester, year } = router.params;
@@ -455,35 +314,6 @@ export default {
         }
       }
     });
-
-    const apiData = computed(() => apiDataStore.getApiData);
-
-    const goToPage = (page) => {
-      if (page < 1 || page > totalPages.value) return;
-
-      currentPage.value = page;
-    };
-
-    console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
-
-    const paginatedData = computed(() => {
-      const dataToPaginate = searchTerm.value ? filteredData.value : apiData.value;
-      if (!dataToPaginate) return [];
-
-      const startIdx = (currentPage.value - 1) * itemsPerPage.value;
-      let endIdx = currentPage.value * itemsPerPage.value;
-
-      if (endIdx > dataToPaginate.length) {
-        endIdx = dataToPaginate.length;
-      }
-
-      return dataToPaginate.slice(startIdx, endIdx);
-    });
-
-    // 編號
-    const getSerialNumber = (index) => {
-      return (currentPage.value - 1) * itemsPerPage.value + index + 1;
-    };
 
     watch(
       () => apiDataStore.getApiData,
@@ -513,28 +343,56 @@ export default {
       calculateStartAndEndIndex();
     });
 
-    watch(
-      currentPage,
-      () => {
-        const startIdx = (currentPage.value - 1) * itemsPerPage.value;
-        const endIdx = currentPage.value * itemsPerPage.value;
-        const displayedIndexes = Object.keys(printSelection.value).map(Number);
+    const toggleCheckbox = (index) => {
+      printSelection.value[index] = !printSelection.value[index];
+    };
 
-        const newDataIndexes = displayedIndexes.filter(
-          (idx) => idx >= startIdx && idx < endIdx
-        );
-        printSelection.value = newDataIndexes.reduce((acc, idx) => {
-          acc[idx] = printSelection.value[idx];
-          return acc;
-        }, {});
-      },
-      { immediate: true }
-    );
+    const handleCheckboxClick = (event, index) => {
+      toggleCheckbox(index);
+    };
+
+    const changePageSize = (value) => {
+      itemsPerPage.value = parseInt(value);
+      calculateEndIndex();
+    };
+
+    const selectAll = ref(false);
+
+    function resetVariables() {
+      currentPage.value = 1;
+      startIndex.value = 1;
+      calculateEndIndex();
+    }
+
+    const apiData = computed(() => apiDataStore.getApiData);
+
+    const goToPage = (page) => {
+      if (page < 1 || page > totalPages.value) return;
+
+      currentPage.value = page;
+    };
+
+    const paginatedData = computed(() => {
+      const dataToPaginate = searchTerm.value ? filteredData.value : apiData.value;
+      if (!dataToPaginate) return [];
+
+      const startIdx = (currentPage.value - 1) * itemsPerPage.value;
+      let endIdx = currentPage.value * itemsPerPage.value;
+
+      if (endIdx > dataToPaginate.length) {
+        endIdx = dataToPaginate.length;
+      }
+
+      return dataToPaginate.slice(startIdx, endIdx);
+    });
+
+    const getSerialNumber = (index) => {
+      return (currentPage.value - 1) * itemsPerPage.value + index + 1;
+    };
 
     const filteredData = computed(() => {
       const regex = new RegExp(searchTerm.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
-        s;
         return Object.values(item).some((value) => regex.test(value));
       });
     });
@@ -545,15 +403,9 @@ export default {
     }
 
     function calculateEndIndex() {
-      console.log("totalItems:", totalItems.value);
-      console.log("currentPage:", currentPage.value);
-      console.log("itemsPerPage:", itemsPerPage.value);
-
       const startIdx = (currentPage.value - 1) * itemsPerPage.value + 1;
       const endIdx = currentPage.value * itemsPerPage.value;
       const endIndex = Math.min(endIdx, totalItems.value);
-
-      console.log("endIndex:", endIndex);
       return endIndex;
     }
 
@@ -587,6 +439,7 @@ export default {
         currentPage.value--;
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
+      apiDataStore.setSelectedData(selectedData);
     };
 
     const nextPage = () => {
@@ -594,12 +447,12 @@ export default {
         currentPage.value++;
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
+      apiDataStore.setSelectedData(selectedData);
     };
 
     const showPrintContent = ref(false);
 
-    /* const handlePrint = async () => {
-      console.log("Print！");
+    const handlePrint = async () => {
       console.log("printSelection：", printSelection.value);
 
       const selectedIndexes = Object.keys(printSelection.value).filter(
@@ -612,40 +465,14 @@ export default {
         );
         console.log("Selected Data:", selectedData);
         apiDataStore.setSelectedData(selectedData);
-        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
         console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
         await router.push({ name: "PrintContent" });
       } else {
         console.error("printSelection is not an array or is empty!");
-      }
-    }; */
-
-    const handlePrint = async () => {
-      console.log("Print！");
-      console.log("printSelection：", printSelection.value);
-
-      const selectedIndexes = Object.keys(printSelection.value).filter(
-        (displayIndex) => printSelection.value[displayIndex]
-      );
-
-      if (Array.isArray(selectedIndexes) && selectedIndexes.length > 0) {
-        // 使用選取的顯示索引從原始資料中獲取被選取的資料
-        const selectedData = selectedIndexes.map((displayIndex) =>
-          JSON.parse(JSON.stringify(apiDataStore.getApiData[displayIndex]))
-        );
-        console.log("Selected Data:", selectedData);
-        apiDataStore.setSelectedData(selectedData);
-        console.log("apiDataStore 中的資料：", apiDataStore.getApiData);
-        console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
-        await router.push({ name: "PrintContent" });
-      } else {
-        console.error("printSelection is not an array or is empty!");
-        sweetAlert.typicalType("注意", "沒有勾選資料唷！", "warning", `OK`);
       }
     };
 
     const buttonSelectAll = () => {
-      console.log("SelectAll");
       selectAll.value = true;
       printSelection.value = Array.from(
         { length: apiDataStore.getApiData.length },
@@ -655,7 +482,6 @@ export default {
     };
 
     const buttonDeselect = () => {
-      console.log("Deselect");
       selectAll.value = false;
       printSelection.value = [];
       console.log(printSelection.value);
@@ -697,387 +523,5 @@ export default {
 </script>
 
 <style scoped>
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
-  }
-}
-:root {
-  --bs-blue: #0d6efd;
-  --bs-indigo: #6610f2;
-  --bs-purple: #6f42c1;
-  --bs-pink: #d63384;
-  --bs-red: #dc3545;
-  --bs-orange: #fd7e14;
-  --bs-yellow: #ffc107;
-  --bs-green: #198754;
-  --bs-teal: #20c997;
-  --bs-cyan: #0dcaf0;
-  --bs-white: #fff;
-  --bs-gray: #6c757d;
-  --bs-gray-dark: #343a40;
-  --bs-primary: #0d6efd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  --bs-gradient: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0)
-  );
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-html[屬性樣式] {
-  -webkit-locale: "en";
-}
-使用者代理程式樣式表 html {
-  display: block;
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-.container {
-  margin-top: 5.5%;
-  margin-bottom: 7%;
-}
-.icon-address {
-  font-size: 7px;
-  position: fixed;
-  top: 905px;
-  left: 1838px;
-}
-.bd-callout-warning {
-  --bd-callout-color: var(--bs-warning-text-emphasis);
-  --bd-callout-bg: var(--bs-warning-bg-subtle);
-  --bd-callout-border: var(--bs-warning-border-subtle);
-}
-.bd-callout {
-  --bs-link-color-rgb: var(--bd-callout-link);
-  --bs-code-color: var(--bd-callout-code-color);
-  padding: 1.25rem;
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-  color: var(--bd-callout-color, inherit);
-  background-color: var(--bd-callout-bg, var(--bs-gray-100));
-  border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-300));
-}
-.bold {
-  font-size: 1.05rem;
-  font-weight: bold;
-}
-td {
-  font-size: 0.92rem;
-  line-height: 1.5;
-  vertical-align: middle;
-}
-.table th:first-child,
-.table td:first-child {
-  width: 10%;
-}
-.table th:nth-child(2),
-.table td:nth-child(2) {
-  width: 13%;
-}
-.table th:nth-child(3),
-.table td:nth-child(3) {
-  width: 30%;
-}
-.table th:nth-child(4),
-.table td:nth-child(4) {
-  width: 47%;
-}
-tr.floating-row {
-  transition: box-shadow 0.03s ease;
-}
-tr.floating-row:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-.std-state-text {
-  color: #ff7809;
-}
-.credit-text {
-  color: #d40000;
-}
-.etc-content-text {
-  color: #808080;
-}
-.icon-address {
-  font-size: 7px;
-  position: fixed;
-  top: 905px;
-  left: 1820px;
-}
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-/**/
-.pagination-container .page-link[aria-label="Previous"],
-.pagination-container .page-link[aria-label="Next"] {
-  color: #4682b4;
-  background-color: white;
-  border-color: #ced4da;
-}
-
-.pagination-container .page-item .page-link {
-  color: #4682b4;
-  background-color: white;
-  border-color: #ced4da;
-}
-
-.pagination-container .page-item.active .page-link {
-  background-color: #4682b4;
-  color: white;
-  border-color: #ced4da;
-}
-#app {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-}
-.card {
-  border: 0;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.5rem;
-  margin-top: -3%;
-}
-.form-label.active {
-  display: none;
-  color: blue;
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-}
-.pagination select {
-  margin: 0 5px;
-  width: 5.5%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  height: 30px;
-}
-.pagination-button {
-  border: none;
-  background-color: transparent;
-  font-size: 1.4rem;
-}
-.rows-per-page {
-  font-size: 0.95rem;
-  color: #343a40;
-}
-.footer-copyright {
-  font-size: 0.7rem;
-  text-align: center;
-  margin-top: -2%;
-}
-select {
-  border: none;
-  border-radius: 5px;
-  background-color: transparent;
-  min-height: auto;
-  padding-top: 0.33em;
-  padding-bottom: 0.33em;
-  padding-left: 0.75em;
-  padding-right: 0.75em;
-  border: 0;
-  transition: all 0.2s linear;
-}
-.btn-style {
-  background-color: #4682b4;
-  border-color: #ced4da;
-  width: 150px;
-}
-.btn-style:hover {
-  background-color: #0f4f85;
-}
-.btn-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.resultPage-btn {
-  margin-left: auto;
-}
-.total-credit {
-  line-height: 0.1;
-}
-.tch-insert-text {
-  line-height: 3;
-}
-.news-border {
-  width: 30px;
-  height: 2px;
-  margin: 10px 0;
-  transition: all 0.4s;
-}
-
-@media (max-width: 1200px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .container {
-    margin-top: 13.5%;
-    /* margin-left: center; */
-  }
-  .perpage-size {
-    width: 80%;
-  }
-  .pagination {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .resultPage-btn {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 10px;
-    justify-content: center;
-  }
-
-  .resultPage-btn button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    justify-content: center;
-  }
-  .pagination {
-    display: flex;
-    align-items: center;
-    display: inline-block;
-    justify-content: center;
-  }
-
-  .pagination-button {
-    margin-left: 10px;
-    justify-content: center;
-  }
-}
-@media (max-width: 991px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .container {
-    margin-top: 13.5%;
-    margin-left: center;
-  }
-  .pagination {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .resultPage-btn {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 10px;
-    justify-content: center;
-  }
-
-  .resultPage-btn button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    justify-content: center;
-  }
-  .pagination {
-    display: flex;
-    align-items: center;
-    display: inline-block;
-    justify-content: center;
-  }
-
-  .pagination-button {
-    margin-left: 10px;
-    justify-content: center;
-  }
-}
-@media (max-width: 769px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .container {
-    margin-top: 11.5%;
-  }
-  .pagination {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .resultPage-btn {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 10px;
-    justify-content: center;
-  }
-
-  .resultPage-btn button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    justify-content: center;
-  }
-  .pagination {
-    display: flex;
-    align-items: center;
-    display: inline-block;
-    justify-content: center;
-  }
-
-  .pagination-button {
-    margin-left: 10px;
-    justify-content: center;
-  }
-}
-@media (max-width: 575px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .resultPage-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-  }
-
-  .resultPage-btn > * {
-    margin-bottom: 5px;
-  }
-  .container {
-    margin-top: 18.5%;
-  }
-}
+@import "../style/ResultStyle.css";
 </style>

@@ -288,13 +288,11 @@ export default {
     const inputAcademicYear = ref("");
     const inputSemester = ref("");
     const inputStudentID = ref("");
-
     const semesterWarnings = ref([]);
     const apiDataStore = useApiDataStore();
 
     const collegeDepartments = {
       醫學院: [
-        // 大學部
         "醫學系",
         "藥學系",
         "護理學系",
@@ -307,7 +305,6 @@ export default {
         "生物醫學暨工程學系",
         "分子生物暨人類遺傳學系",
         "醫學影像暨放射科學系",
-        // 研究所
         "醫學科學研究所(博)",
         "轉譯醫學博士學位學程",
         "護理學系碩士班",
@@ -325,26 +322,21 @@ export default {
         "生物醫學全英語學分學程",
       ],
       教育傳播學院: [
-        // 大學部
         "傳播學系",
         "兒童發展與家庭教育學系",
-        // 碩士班
         "傳播學系碩士班 ",
         "教育研究所",
       ],
       人文社會學院: [
-        // 大學部
         "東方語文學系中文組",
         "東方語文學系日文組",
         "社會工作學系",
         "人類發展與心理學系",
-        // 碩士班
         "人類發展與心理學系碩士班",
         "東方語文學系碩士班",
         "宗教與人文研究所",
       ],
       國際暨跨領域學院: [
-        // 大學部
         "外國語文學系",
         "國際服務產業管理學士學位學程",
         "國際數位媒體科技學士學位學程",
@@ -405,7 +397,6 @@ export default {
               apiDataStore.setApiData(response.data);
               await router.push({ name: "ResultMain" });
             } else {
-              console.log("無相符資料");
               sweetAlert.typicalType("發生錯誤", "無相符資料", "error", `OK`);
             }
           } else {
@@ -458,21 +449,17 @@ export default {
 
           if (response && response.status === 200) {
             if (response.data && response.data.length > 0) {
-              console.log("相符資料：", response.data);
               response.data.inputAcademicYear = inputAcademicYear.value;
               response.data.inputSemester = inputSemester.value;
               apiDataStore.setApiData(response.data);
               createExcelFromData(response.data);
             } else {
-              console.log("無相符資料");
               sweetAlert.typicalType("發生錯誤", "無相符資料", "error", `OK`);
             }
           } else {
-            console.error("API 請求失敗:", response.statusText);
             sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
           }
         } catch (error) {
-          console.error("Error during API request:", error);
           sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
         }
       }
@@ -601,7 +588,6 @@ export default {
 
     const buttonClear = async (event) => {
       event.preventDefault();
-      console.log("Clear！");
 
       selectedCollege.value = "";
       selectedDepartment.value = "";
@@ -631,229 +617,5 @@ export default {
 </script>
 
 <style scoped>
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-:root {
-  --bs-blue: #0d6efd;
-  --bs-indigo: #6610f2;
-  --bs-purple: #6f42c1;
-  --bs-pink: #d63384;
-  --bs-red: #dc3545;
-  --bs-orange: #fd7e14;
-  --bs-yellow: #ffc107;
-  --bs-green: #198754;
-  --bs-teal: #20c997;
-  --bs-cyan: #0dcaf0;
-  --bs-white: #fff;
-  --bs-gray: #6c757d;
-  --bs-gray-dark: #343a40;
-  --bs-primary: #0d6efd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  --bs-gradient: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0)
-  );
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-html[屬性樣式] {
-  -webkit-locale: "en";
-}
-
-使用者代理程式樣式表 html {
-  display: block;
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
-.container {
-  margin-top: 5.5%;
-  margin-bottom: 7%;
-}
-.search-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -3.9%;
-}
-.btn-style {
-  background-color: #4682b4;
-  border-color: #ced4da;
-  width: 150px;
-}
-.btn-style:hover {
-  background-color: #0f4f85;
-}
-.btn-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1.2%;
-}
-.icon-address {
-  font-size: 7px;
-  position: fixed;
-  top: 905px;
-  left: 1820px;
-}
-.footer-copyright {
-  font-size: 0.7rem;
-  text-align: center;
-  margin-top: -7.5%;
-}
-.bd-callout-warning {
-  --bd-callout-color: var(--bs-warning-text-emphasis);
-  --bd-callout-bg: var(--bs-warning-bg-subtle);
-  --bd-callout-border: var(--bs-warning-border-subtle);
-}
-.bd-callout {
-  --bs-link-color-rgb: var(--bd-callout-link);
-  --bs-code-color: var(--bd-callout-code-color);
-  padding: 1.25rem;
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-  color: var(--bd-callout-color, inherit);
-  background-color: var(--bd-callout-bg, var(--bs-gray-100));
-  border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-300));
-}
-.list-unstyled {
-  text-align: left;
-  line-height: 1.5;
-  font-size: 1rem;
-  margin-top: 6px;
-}
-.list-content-unstyled {
-  list-style-type: none;
-  text-align: left;
-  line-height: 1.5;
-  margin-left: 4%;
-  margin-bottom: -2%;
-  margin-top: 0.5%;
-}
-.custom-line-height {
-  line-height: 1.5;
-}
-.instructions-header {
-  font-size: 1.3rem;
-  margin-left: 8%;
-  margin-right: 10%;
-}
-.instructions-table {
-  margin-left: 1%;
-  margin-right: 10%;
-}
-.attention-table {
-  margin-left: -1%;
-}
-.required {
-  color: #d40000;
-}
-
-@media (max-width: 1200px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .instructions-header {
-    font-size: 1.3rem;
-    margin-left: 7%;
-    margin-right: 7%;
-  }
-  body {
-    font-size: 1.9rem;
-    margin-top: 10%;
-  }
-  .search-form {
-    font-size: 1rem;
-    width: 100%;
-    margin-left: auto;
-  }
-}
-@media (max-width: 991px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .instructions-header {
-    font-size: 1.3rem;
-    margin-left: 7%;
-    margin-right: 7%;
-  }
-  body {
-    margin-top: 8%;
-  }
-  .search-form {
-    margin-left: center;
-    width: auto;
-  }
-}
-@media (max-width: 769px) {
-  .search-page-title {
-    margin-left: auto;
-  }
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .instructions-header {
-    margin-left: 7%;
-    margin-right: 7%;
-  }
-  body {
-    margin-top: 6%;
-    font-size: 1rem;
-    margin-left: auto;
-  }
-  .search-form {
-    width: auto;
-    margin-left: auto;
-  }
-}
-@media (max-width: 575px) {
-  .search-page-title {
-    margin-left: auto;
-  }
-  .bd-placeholder-img-lg {
-    font-size: 3rem;
-  }
-  .instructions-header {
-    /* font-size: 1.3rem; */
-    margin-left: 7%;
-    margin-right: 7%;
-  }
-  body {
-    margin-top: 13%;
-    font-size: 1rem;
-  }
-  .search-form {
-    margin-top: -13%;
-    width: 100%;
-    margin-left: 0%;
-  }
-}
+@import "../style/SearchStyle.css";
 </style>
