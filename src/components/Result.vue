@@ -314,6 +314,12 @@ export default {
           resultTitle.value = `${year}學年第${semester}學期期中預警學生`;
         }
       }
+      watch(router.currentRoute, async (to, from) => {
+        if (to.name !== from.name) {
+          // 如果切換了頁面
+          await updatePrintSelection(); // 更新勾選狀態
+        }
+      });
     });
 
     watch(
@@ -349,7 +355,10 @@ export default {
     };
 
     const handleCheckboxClick = (event, index) => {
-      toggleCheckbox(index);
+      const pageIndex = (currentPage.value - 1) * itemsPerPage.value;
+      const selectedIndex = pageIndex + index;
+      printSelection.value[selectedIndex] = !printSelection.value[selectedIndex];
+      updatePrintSelection();
     };
 
     const changePageSize = (value) => {
@@ -369,8 +378,8 @@ export default {
 
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
-
       currentPage.value = page;
+      updatePrintSelection(); // 確保在切換頁面時同步更新選擇的資料
     };
 
     const paginatedData = computed(() => {
@@ -453,24 +462,14 @@ export default {
       /* apiDataStore.setSelectedData(selectedData); */
     };
 
-    const updatePrintSelection = () => {
-      // Clear old data
-      printSelection.value = [];
-
-      const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-      const endIndex = Math.min(startIndex + itemsPerPage.value, totalItems.value);
-
-      // Initialize printSelection with false values
-      for (let i = 0; i < totalItems.value; i++) {
-        printSelection.value.push(false);
-      }
-
-      // Update printSelection based on current page selection
-      for (let i = startIndex; i < endIndex; i++) {
-        if (typeof printSelection.value[i] === "undefined") {
-          printSelection.value[i] = false;
-        }
-      }
+    const updatePrintSelection = async () => {
+      const selectedIndexes = Object.keys(printSelection.value).filter(
+        (index) => printSelection.value[index]
+      );
+      const selectedData = selectedIndexes.map((index) =>
+        JSON.parse(JSON.stringify(apiDataStore.getApiData[index]))
+      );
+      apiDataStore.setSelectedData(selectedData);
     };
 
     const showPrintContent = ref(false);
