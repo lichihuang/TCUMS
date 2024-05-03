@@ -195,7 +195,7 @@
                       class="btn-style w-10 btn btn-primary btn-md"
                       type="reset"
                     >
-                      取消選取
+                      清除選取
                     </button>
                   </div>
                 </div>
@@ -376,10 +376,35 @@ export default {
 
     const apiData = computed(() => apiDataStore.getApiData);
 
+    /* const goToPage = (page) => {
+      if (page < 1 || page > totalPages.value) return;
+      clearPrintSelection(); // 清除上一頁的勾選項目
+      currentPage.value = page;
+      updatePrintSelection(); // 更新當前頁面的勾選項目
+    }; */
+
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
+      clearPrintSelection(); // 清除上一頁的勾選項目
       currentPage.value = page;
-      updatePrintSelection(); // 確保在切換頁面時同步更新選擇的資料
+    };
+
+    /* const clearPrintSelection = () => {
+      const pageIndex = (currentPage.value - 1) * itemsPerPage.value;
+      const endIndex = Math.min(
+        pageIndex + itemsPerPage.value,
+        printSelection.value.length
+      );
+      for (let i = pageIndex; i < endIndex; i++) {
+        printSelection.value[i] = false;
+      }
+    }; */
+
+    const clearPrintSelection = () => {
+      printSelection.value = Array.from(
+        { length: apiDataStore.getApiData.length },
+        () => false
+      );
     };
 
     const paginatedData = computed(() => {
