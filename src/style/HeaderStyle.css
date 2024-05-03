@@ -2,6 +2,7 @@ nav {
     /*nav為選擇器*/
     background-color: #003c6b !important;
     height: 10%;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   }
   .navbar-nav .nav-link .bi {
     margin-left: -10%;
