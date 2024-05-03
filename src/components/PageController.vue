@@ -23,7 +23,7 @@
     <div>
       <div class="mask" v-if="showIllustrate"></div>
       <div class="illustrate-set" v-if="showIllustrate">
-        <img :src="illustrateBox" alt="Illustrate" />
+        <img :src="illustrateBox" alt="Illustrate" class="illustrateIMG" />
       </div>
       <div class="illustrate">
         <lord-icon
@@ -132,8 +132,8 @@ export default {
 
 .illustrate-set {
   position: fixed;
-  top: 340px;
-  left: 25px;
+  top: 320px;
+  left: 30px;
   z-index: 9999;
 }
 
@@ -178,13 +178,29 @@ export default {
   }
   .footer {
     text-align: right;
-    margin-left: 37%;
-    margin-bottom: 3%;
+    margin-left: 36%;
+    margin-bottom: -1%;
   }
   .illustrate {
     text-align: right;
     margin-left: 37%;
     margin-bottom: 3%;
+  }
+  .illustrate {
+    position: fixed;
+    bottom: -10px;
+    left: -360px;
+    z-index: 9999;
+  }
+  .illustrate-set {
+    position: fixed;
+    top: 720px;
+    left: -10px;
+    z-index: 9999;
+  }
+  .illustrateIMG {
+    width: 1300px;
+    height: 1300px;
   }
 }
 @media (max-width: 991px) {
@@ -207,6 +223,22 @@ export default {
     margin-left: -2%;
     margin-bottom: 1%;
   }
+  .illustrate {
+    position: fixed;
+    bottom: -10px;
+    left: -280px;
+    z-index: 9999;
+  }
+  .illustrate-set {
+    position: fixed;
+    top: 540px;
+    left: -20px;
+    z-index: 9999;
+  }
+  .illustrateIMG {
+    width: 1200px;
+    height: 1200px;
+  }
 }
 @media (max-width: 769px) {
   .lord-icon:hover {
@@ -225,8 +257,24 @@ export default {
   }
   .footer {
     text-align: right;
-    margin-left: -1.3%;
-    margin-bottom: 1%;
+    margin-left: -2%;
+    margin-bottom: -1%;
+  }
+  .illustrate {
+    position: fixed;
+    bottom: -10px;
+    left: -270px;
+    z-index: 9999;
+  }
+  .illustrate-set {
+    position: fixed;
+    top: 410px;
+    left: -10px;
+    z-index: 9999;
+  }
+  .illustrateIMG {
+    width: 1200px;
+    height: 1200px;
   }
 }
 @media (max-width: 575px) {
@@ -247,8 +295,24 @@ export default {
   .footer {
     position: fixed;
     text-align: right;
-    margin-left: -1.3%;
-    margin-bottom: 1%;
+    margin-left: -10%;
+    margin-bottom: 3%;
+  }
+  .illustrate {
+    position: fixed;
+    bottom: -10px;
+    left: -135px;
+    z-index: 9999;
+  }
+  .illustrate-set {
+    position: fixed;
+    top: 440px;
+    left: -60px;
+    z-index: 9999;
+  }
+  .illustrateIMG {
+    width: 900px;
+    height: 900px;
   }
 }
 </style>

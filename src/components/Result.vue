@@ -220,6 +220,7 @@ import PageController from "../components/PageController.vue";
 import PrintContent from "./PrintContent.vue";
 import print from "vue3-print-nb";
 import { deptName, stdState } from "../components/TransformData.js";
+import sweetAlert from "../components/sweetAlert";
 
 import { Input, initMDB } from "mdb-ui-kit";
 initMDB({ Input });
@@ -438,16 +439,38 @@ export default {
       if (currentPage.value > 1) {
         currentPage.value--;
         window.scrollTo({ top: 0, behavior: "smooth" });
+        updatePrintSelection();
       }
-      apiDataStore.setSelectedData(selectedData);
+      /* apiDataStore.setSelectedData(selectedData); */
     };
 
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
         currentPage.value++;
         window.scrollTo({ top: 0, behavior: "smooth" });
+        updatePrintSelection();
       }
-      apiDataStore.setSelectedData(selectedData);
+      /* apiDataStore.setSelectedData(selectedData); */
+    };
+
+    const updatePrintSelection = () => {
+      // Clear old data
+      printSelection.value = [];
+
+      const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+      const endIndex = Math.min(startIndex + itemsPerPage.value, totalItems.value);
+
+      // Initialize printSelection with false values
+      for (let i = 0; i < totalItems.value; i++) {
+        printSelection.value.push(false);
+      }
+
+      // Update printSelection based on current page selection
+      for (let i = startIndex; i < endIndex; i++) {
+        if (typeof printSelection.value[i] === "undefined") {
+          printSelection.value[i] = false;
+        }
+      }
     };
 
     const showPrintContent = ref(false);
@@ -468,7 +491,7 @@ export default {
         console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
         await router.push({ name: "PrintContent" });
       } else {
-        console.error("printSelection is not an array or is empty!");
+        sweetAlert.typicalType("注意", "尚未勾選資料列", "warning", `OK`);
       }
     };
 
