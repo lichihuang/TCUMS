@@ -62,7 +62,11 @@
                             class="text-center"
                             @click="handleCheckboxClick($event, index)"
                           >
-                            <input type="checkbox" v-model="printSelection[index]" />
+                            <input
+                              type="checkbox"
+                              v-model="printSelection[getSerialNumber(index) - 1]"
+                              @change="changedSelected"
+                            />
                           </td>
                           <td v-if="item.warnings && item.warnings.length > 0">
                             <div v-for="(warning, wIndex) in item.warnings" :key="wIndex">
@@ -376,29 +380,11 @@ export default {
 
     const apiData = computed(() => apiDataStore.getApiData);
 
-    /* const goToPage = (page) => {
-      if (page < 1 || page > totalPages.value) return;
-      clearPrintSelection(); // 清除上一頁的勾選項目
-      currentPage.value = page;
-      updatePrintSelection(); // 更新當前頁面的勾選項目
-    }; */
-
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
       clearPrintSelection(); // 清除上一頁的勾選項目
       currentPage.value = page;
     };
-
-    /* const clearPrintSelection = () => {
-      const pageIndex = (currentPage.value - 1) * itemsPerPage.value;
-      const endIndex = Math.min(
-        pageIndex + itemsPerPage.value,
-        printSelection.value.length
-      );
-      for (let i = pageIndex; i < endIndex; i++) {
-        printSelection.value[i] = false;
-      }
-    }; */
 
     const clearPrintSelection = () => {
       printSelection.value = Array.from(
@@ -534,6 +520,11 @@ export default {
       console.log(printSelection.value);
     };
 
+    const changedSelected = (event) => {
+      console.log("Selected: ", printSelection.value);
+      console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
+    };
+
     return {
       pageOptions,
       currentPage,
@@ -564,6 +555,7 @@ export default {
       formatDate,
       toggleCheckbox,
       handleCheckboxClick,
+      changedSelected,
     };
   },
 };
