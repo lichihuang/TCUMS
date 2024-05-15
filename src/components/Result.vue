@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-9 col-md-12 col-lg-12">
+  <div class="container col-md-12 col-lg-12">
     <main>
       <div class="py-5 text-center">
         <h3>期中預警通知列印</h3>
@@ -8,15 +8,18 @@
       <section>
         <div class="card">
           <div class="card-header">
-            <div class="input-group">
-              <div class="form-outline">
-                <input
-                  id="search-input"
-                  type="search"
-                  class="form-control"
-                  v-model="searchQuery"
-                />
-                <label class="form-label" for="search-input"> Search </label>
+            <div class="form-outline" data-mdb-input-init>
+              <input
+                id="search-input"
+                type="search"
+                class="form-control"
+                v-model="searchQuery"
+              />
+              <label class="form-label" for="search-input"> Search </label>
+              <div class="form-notch">
+                <div class="form-notch-leading" style="width: 9px"></div>
+                <div class="form-notch-middle" style="width: 47.2px"></div>
+                <div class="form-notch-trailing"></div>
               </div>
             </div>
           </div>
@@ -322,14 +325,6 @@ export default {
       });
     });
 
-    onMounted(() => {
-      // 需要時初始化 MDBootstrap 的 JavaScript 插件
-      const inputElement = document.getElementById("search-input");
-      if (window.mdb && inputElement) {
-        new window.mdb.Input(inputElement);
-      }
-    });
-
     watch(
       () => apiDataStore.getApiData,
       (newValue, oldValue) => {
@@ -415,7 +410,6 @@ export default {
       return (currentPage.value - 1) * itemsPerPage.value + index + 1;
     };
 
-    // Search
     const filteredData = computed(() => {
       const regex = new RegExp(searchTerm.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {

@@ -274,6 +274,7 @@
   
   .form-outline input[type="search"] {
     padding: 0.75rem 0.75rem 0.25rem 0.75rem;
+    z-index: 0;
   }
   
   .form-outline .form-label {
