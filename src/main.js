@@ -5,14 +5,10 @@ import ResultMain from "./views/ResultMain.vue"
 import router from './router';
 import Print from 'vue3-print-nb'
 import PrintContent from "./components/PrintContent.vue";
-
 import axios from './axios/axios'
-
 import 'mdb-vue-ui-kit/css/mdb.min.css';
-
 import { createPinia } from 'pinia'
-import { SemesterWarningCountStore } from './store/counter'
-
+import { useApiDataStore } from './store/apiDataStore';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 

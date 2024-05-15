@@ -100,6 +100,10 @@
     font-size: 1.05rem;
     font-weight: bold;
   }
+  .card-body{
+    position: relative;
+    z-index: 1000;
+  }
   td {
     font-size: 0.92rem;
     line-height: 1.5;
@@ -257,6 +261,57 @@
     margin-left: -7%;
     margin-top: 25%;
     margin-top: -20%;
+  }
+  .form-control {
+    border: 1px solid #ced4da !important;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .form-outline {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  
+  .form-outline input[type="search"] {
+    padding: 0.75rem 0.75rem 0.25rem 0.75rem;
+  }
+  
+  .form-outline .form-label {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(15%);
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+    background: #fff;
+    padding: 0rem 0.2rem 0rem 0.2rem; /*上右下左*/
+    line-height: 1rem;
+  }
+
+  /* 輸入框被點擊時的位置*/
+  .form-outline input[type="search"]:focus + .form-label {
+    top: 0.18rem;
+    left: 0.5rem;
+  }
+  
+  /* 輸入文字後點擊其他地方時的位置 */
+  .form-outline input[type="search"]:not(:focus):not(:placeholder-shown) + .form-label,
+  .form-outline input[type="search"]:focus:not(:placeholder-shown) + .form-label {
+    top: 0.18rem;
+    left: 0.5rem;
+  }
+  
+  .form-outline input[type="search"]:not(:focus):not(:placeholder-shown) + .form-label::before,
+  .form-outline input[type="search"]:focus:not(:placeholder-shown) + .form-label::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5ch; /* 输入框未聚焦時的位置 */
+    transform: translateY(-50%);
+    height: 1em;
+    background: #fff;
+    padding: 0rem 1.8rem 0rem 1.8rem; /*上右下左*/
+    z-index: -1;
   }
   
   @media (max-width: 1200px) {

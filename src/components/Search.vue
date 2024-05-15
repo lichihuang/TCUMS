@@ -266,7 +266,7 @@
 </template>
 
 <script>
-import { ref, computed, watchEffect, onMounted } from "vue";
+import { ref, computed, watchEffect, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import ExcelJS from "exceljs";
 import axios from "axios";
@@ -281,13 +281,13 @@ export default {
   setup() {
     const router = useRouter();
 
-    const selectedCollege = ref("");
-    const selectedDepartment = ref("");
     const inputEarlyWarningCourses = ref("");
     const inputEarlyWarningRequiredCourses = ref("");
+    const inputStudentID = ref("");
     const inputAcademicYear = ref("");
     const inputSemester = ref("");
-    const inputStudentID = ref("");
+    const selectedCollege = ref("");
+    const selectedDepartment = ref("");
     const semesterWarnings = ref([]);
     const apiDataStore = useApiDataStore();
 
@@ -352,6 +352,7 @@ export default {
       console.log(selectedDepartment.value);
     });
 
+    // 搜尋
     const buttonSearch = async (event) => {
       event.preventDefault();
 
@@ -410,19 +411,17 @@ export default {
       }
     };
 
+    // 匯出 Excel
     const buttonToExcel = async (event) => {
       event.preventDefault();
 
       let errorMessages = "";
 
       if (!inputAcademicYear.value.trim()) {
-        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-          errorMessages += "請輸入學年及學期\n";
-        } else {
-          errorMessages += "請輸入學年\n";
-        }
-      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-        errorMessages += "請選填學期\n";
+        errorMessages += "請輸入學年\n";
+      }
+      if (!inputSemester.value.trim()) {
+        errorMessages += "請輸入學期\n";
       }
 
       if (errorMessages) {
@@ -465,6 +464,7 @@ export default {
       }
     };
 
+    // Excel檔
     const createExcelFromData = (data) => {
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Sheet 1");
@@ -490,6 +490,7 @@ export default {
       worksheet.getRow(2).height = 20;
       worksheet.getRow(2).alignment = { vertical: "middle" };
 
+      // Excel 檔案格式設定
       const headerRow = worksheet.addRow([
         "導師姓名",
         "系所",
@@ -597,6 +598,44 @@ export default {
       inputSemester.value = "";
       inputStudentID.value = "";
     };
+
+    // 從 sessionStorage 載資料
+    const loadFormData = () => {
+      const formData = JSON.parse(sessionStorage.getItem("formData"));
+      if (formData) {
+        inputEarlyWarningCourses.value = formData.inputEarlyWarningCourses;
+        inputEarlyWarningRequiredCourses.value =
+          formData.inputEarlyWarningRequiredCourses;
+        inputStudentID.value = formData.inputStudentID;
+        inputAcademicYear.value = formData.inputAcademicYear;
+        inputSemester.value = formData.inputSemester;
+        selectedCollege.value = formData.selectedCollege;
+        selectedDepartment.value = formData.selectedDepartment;
+      }
+    };
+
+    // 將資料儲存到 sessionStorage
+    const saveFormData = () => {
+      const formData = {
+        inputEarlyWarningCourses: inputEarlyWarningCourses.value,
+        inputEarlyWarningRequiredCourses: inputEarlyWarningRequiredCourses.value,
+        inputStudentID: inputStudentID.value,
+        inputAcademicYear: inputAcademicYear.value,
+        inputSemester: inputSemester.value,
+        selectedCollege: selectedCollege.value,
+        selectedDepartment: selectedDepartment.value,
+      };
+      sessionStorage.setItem("formData", JSON.stringify(formData));
+    };
+
+    // 在組件掛載時加載資料，組件卸載時保存資料
+    onMounted(loadFormData);
+    onBeforeUnmount(saveFormData);
+
+    // 頁面刷新時清除 sessionStorage 資料
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.removeItem("formData");
+    });
 
     return {
       selectedCollege,

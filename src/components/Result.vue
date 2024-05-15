@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-md-12 col-lg-12">
+  <div class="container mt-9 col-md-12 col-lg-12">
     <main>
       <div class="py-5 text-center">
         <h3>期中預警通知列印</h3>
@@ -8,23 +8,15 @@
       <section>
         <div class="card">
           <div class="card-header">
-            <div class="form-outline" data-mdb-input-init>
-              <input
-                type="text"
-                class="form-control"
-                v-model="searchTerm"
-                @input="handleSearch"
-              />
-              <label
-                class="form-label"
-                for="datatable-search-input"
-                style="margin-left: 0px"
-                >Search</label
-              >
-              <div class="form-notch">
-                <div class="form-notch-leading" style="width: 9px"></div>
-                <div class="form-notch-middle" style="width: 47.2px"></div>
-                <div class="form-notch-trailing"></div>
+            <div class="input-group">
+              <div class="form-outline">
+                <input
+                  id="search-input"
+                  type="search"
+                  class="form-control"
+                  v-model="searchQuery"
+                />
+                <label class="form-label" for="search-input"> Search </label>
               </div>
             </div>
           </div>
@@ -216,7 +208,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, onUnmounted, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import { useApiDataStore } from "../store/apiDataStore";
 import CopyrightNotice from "../components/CopyrightNotice.vue";
@@ -251,6 +243,7 @@ export default {
     const resultTitle = ref("");
     const printSelection = ref([]);
     const searchTerm = ref("");
+    const searchQuery = ref("");
     const filteredPages = ref([]);
     const startIndex = ref(1);
     const endIndex = computed(() => {
@@ -259,6 +252,7 @@ export default {
 
     const apiDataStore = useApiDataStore();
 
+    // 時間格式
     const formatDate = (timeString) => {
       const date = new Date(timeString);
       const year = date.getFullYear();
@@ -270,6 +264,7 @@ export default {
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
     };
 
+    // 學生科系轉換
     const departmentName = computed(() => {
       const result = [];
       for (const item of paginatedData.value) {
@@ -283,6 +278,7 @@ export default {
       return result;
     });
 
+    // 老師科系轉換
     const teacherDepartment = computed(() => {
       const result = [];
       for (const item of paginatedData.value) {
@@ -296,6 +292,7 @@ export default {
       return result;
     });
 
+    // 學生狀態轉換
     const studentState = computed(() => {
       const result = [];
       for (const item of paginatedData.value) {
@@ -320,10 +317,17 @@ export default {
       }
       watch(router.currentRoute, async (to, from) => {
         if (to.name !== from.name) {
-          // 如果切換了頁面
-          await updatePrintSelection(); // 更新勾選狀態
+          await updatePrintSelection();
         }
       });
+    });
+
+    onMounted(() => {
+      // 需要時初始化 MDBootstrap 的 JavaScript 插件
+      const inputElement = document.getElementById("search-input");
+      if (window.mdb && inputElement) {
+        new window.mdb.Input(inputElement);
+      }
     });
 
     watch(
@@ -349,7 +353,7 @@ export default {
       calculateStartAndEndIndex();
     });
 
-    watch(itemsPerPage, (/* newVal */) => {
+    watch(itemsPerPage, () => {
       currentPage.value = 1;
       calculateStartAndEndIndex();
     });
@@ -382,7 +386,7 @@ export default {
 
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
-      clearPrintSelection(); // 清除上一頁的勾選項目
+      clearPrintSelection();
       currentPage.value = page;
     };
 
@@ -411,6 +415,7 @@ export default {
       return (currentPage.value - 1) * itemsPerPage.value + index + 1;
     };
 
+    // Search
     const filteredData = computed(() => {
       const regex = new RegExp(searchTerm.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
@@ -461,7 +466,6 @@ export default {
         window.scrollTo({ top: 0, behavior: "smooth" });
         updatePrintSelection();
       }
-      /* apiDataStore.setSelectedData(selectedData); */
     };
 
     const nextPage = () => {
@@ -470,7 +474,6 @@ export default {
         window.scrollTo({ top: 0, behavior: "smooth" });
         updatePrintSelection();
       }
-      /* apiDataStore.setSelectedData(selectedData); */
     };
 
     const updatePrintSelection = async () => {
@@ -543,6 +546,7 @@ export default {
       teacherDepartment,
       studentState,
       showPrintContent,
+      searchQuery,
       changePageSize,
       goToPage,
       getSerialNumber,
