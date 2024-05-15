@@ -64,6 +64,7 @@
   .container {
     margin-top: 5.5%;
     margin-bottom: 7%;
+    white-space: pre-line;
   }
   .search-form {
     display: flex;

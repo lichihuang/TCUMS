@@ -365,7 +365,13 @@ export default {
           errorMessages += "請輸入學年\n";
         }
       } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-        errorMessages += "請選填學期\n";
+        errorMessages += "請選填學期\n" + "\n";
+      }
+      if (
+        !inputEarlyWarningCourses.value.trim() &&
+        !inputEarlyWarningRequiredCourses.value.trim()
+      ) {
+        errorMessages += "/ 預警課程及預警必修課程請至少填寫一項\n";
       }
 
       if (errorMessages) {
@@ -374,8 +380,17 @@ export default {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
           w_dept_no: selectedDepartment.value,
-          w_std_no: inputStudentID.value.trim(),
         };
+        // 檢查選填
+        if (inputStudentID.value.trim()) {
+          requestData.w_std_no = inputStudentID.value.trim();
+        }
+        if (inputEarlyWarningCourses.value.trim()) {
+          requestData.w_course = inputEarlyWarningCourses.value.trim();
+        }
+        if (inputEarlyWarningRequiredCourses.value.trim()) {
+          requestData.w_required_course = inputEarlyWarningRequiredCourses.value.trim();
+        }
 
         try {
           const response = await axios.post(
@@ -418,10 +433,19 @@ export default {
       let errorMessages = "";
 
       if (!inputAcademicYear.value.trim()) {
-        errorMessages += "請輸入學年\n";
+        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+          errorMessages += "請輸入學年及學期\n";
+        } else {
+          errorMessages += "請輸入學年\n";
+        }
+      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+        errorMessages += "請選填學期\n" + "\n";
       }
-      if (!inputSemester.value.trim()) {
-        errorMessages += "請輸入學期\n";
+      if (
+        !inputEarlyWarningCourses.value.trim() &&
+        !inputEarlyWarningRequiredCourses.value.trim()
+      ) {
+        errorMessages += "預警課程及預警必修課程 請至少填寫一項\n";
       }
 
       if (errorMessages) {
@@ -430,8 +454,17 @@ export default {
         const requestData = {
           w_smtr: inputAcademicYear.value + inputSemester.value,
           w_dept_no: selectedDepartment.value,
-          w_std_no: inputStudentID.value.trim(),
         };
+        // 檢查選填
+        if (inputStudentID.value.trim()) {
+          requestData.w_std_no = inputStudentID.value.trim();
+        }
+        if (inputEarlyWarningCourses.value.trim()) {
+          requestData.w_course = inputEarlyWarningCourses.value.trim();
+        }
+        if (inputEarlyWarningRequiredCourses.value.trim()) {
+          requestData.w_required_course = inputEarlyWarningRequiredCourses.value.trim();
+        }
 
         try {
           const response = await axios.post(

@@ -414,7 +414,18 @@ export default {
     const filteredData = computed(() => {
       const regex = new RegExp(searchQuery.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
-        return Object.values(item).some((value) => regex.test(value));
+        return Object.values(item).some((value) => {
+          if (typeof value === "string") {
+            return regex.test(value);
+          } else if (Array.isArray(value)) {
+            return value.some((warning) => {
+              return Object.values(warning).some((warningValue) =>
+                regex.test(warningValue)
+              );
+            });
+          }
+          return false;
+        });
       });
     });
 
