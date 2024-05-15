@@ -239,13 +239,14 @@ export default {
     const currentPage = ref(1);
     const itemsPerPage = ref(10);
     const totalItems = computed(() => {
-      const dataToCount = searchTerm.value ? filteredData.value : apiDataStore.getApiData;
+      const dataToCount = searchQuery.value
+        ? filteredData.value
+        : apiDataStore.getApiData;
       return dataToCount ? dataToCount.length : 0;
     });
     const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
     const resultTitle = ref("");
     const printSelection = ref([]);
-    const searchTerm = ref("");
     const searchQuery = ref("");
     const filteredPages = ref([]);
     const startIndex = ref(1);
@@ -393,7 +394,7 @@ export default {
     };
 
     const paginatedData = computed(() => {
-      const dataToPaginate = searchTerm.value ? filteredData.value : apiData.value;
+      const dataToPaginate = searchQuery.value ? filteredData.value : apiData.value;
       if (!dataToPaginate) return [];
 
       const startIdx = (currentPage.value - 1) * itemsPerPage.value;
@@ -411,7 +412,7 @@ export default {
     };
 
     const filteredData = computed(() => {
-      const regex = new RegExp(searchTerm.value.trim(), "i");
+      const regex = new RegExp(searchQuery.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
         return Object.values(item).some((value) => regex.test(value));
       });
@@ -535,12 +536,11 @@ export default {
       startIndex,
       endIndex,
       filteredData,
-      searchTerm,
+      searchQuery,
       departmentName,
       teacherDepartment,
       studentState,
       showPrintContent,
-      searchQuery,
       changePageSize,
       goToPage,
       getSerialNumber,
