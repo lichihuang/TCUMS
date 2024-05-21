@@ -274,6 +274,7 @@ import { useApiDataStore } from "../store/apiDataStore";
 import sweetAlert from "../components/sweetAlert";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import { deptName, stdState } from "../components/TransformData.js";
 
 export default {
   name: "Search",
@@ -358,20 +359,25 @@ export default {
 
       let errorMessages = "";
 
-      if (!inputAcademicYear.value.trim()) {
-        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-          errorMessages += "請輸入學年及學期\n";
-        } else {
-          errorMessages += "請輸入學年\n";
-        }
-      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-        errorMessages += "請選填學期\n" + "\n";
-      }
       if (
         !inputEarlyWarningCourses.value.trim() &&
         !inputEarlyWarningRequiredCourses.value.trim()
       ) {
-        errorMessages += "/ 預警課程及預警必修課程請至少填寫一項\n";
+        errorMessages += "預警課程及預警必修課程請至少填寫一項\n";
+      }
+      if (!inputAcademicYear.value.trim()) {
+        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+          errorMessages += "/ 請輸入學年及學期\n";
+        } else {
+          errorMessages += "/ 請輸入學年\n";
+        }
+      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+        errorMessages += "/ 請選填學期\n" + "\n";
+      }
+      if (selectedCollege.value.trim()) {
+        if (!selectedDepartment.value.trim()) {
+          errorMessages += "/ 請選填科系\n" + "\n";
+        }
       }
 
       if (errorMessages) {
@@ -390,6 +396,17 @@ export default {
         }
         if (inputEarlyWarningRequiredCourses.value.trim()) {
           requestData.w_required_course = inputEarlyWarningRequiredCourses.value.trim();
+        }
+        if (selectedDepartment.value.trim()) {
+          const departmentName = selectedDepartment.value.trim();
+          const departmentCode = Object.keys(deptName).find(
+            (key) => deptName[key] === departmentName
+          );
+          if (departmentCode) {
+            requestData.w_dept = departmentCode;
+          } else {
+            console.error("無法找到對應的科系代號");
+          }
         }
 
         try {
@@ -432,20 +449,25 @@ export default {
 
       let errorMessages = "";
 
-      if (!inputAcademicYear.value.trim()) {
-        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-          errorMessages += "請輸入學年及學期\n";
-        } else {
-          errorMessages += "請輸入學年\n";
-        }
-      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
-        errorMessages += "請選填學期\n" + "\n";
-      }
       if (
         !inputEarlyWarningCourses.value.trim() &&
         !inputEarlyWarningRequiredCourses.value.trim()
       ) {
-        errorMessages += "預警課程及預警必修課程 請至少填寫一項\n";
+        errorMessages += "預警課程及預警必修課程請至少填寫一項\n";
+      }
+      if (!inputAcademicYear.value.trim()) {
+        if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+          errorMessages += "/ 請輸入學年及學期\n";
+        } else {
+          errorMessages += "/ 請輸入學年\n";
+        }
+      } else if (inputSemester.value !== "1" && inputSemester.value !== "2") {
+        errorMessages += "/ 請選填學期\n" + "\n";
+      }
+      if (selectedCollege.value.trim()) {
+        if (!selectedDepartment.value.trim()) {
+          errorMessages += "/ 請選填科系\n" + "\n";
+        }
       }
 
       if (errorMessages) {
@@ -464,6 +486,9 @@ export default {
         }
         if (inputEarlyWarningRequiredCourses.value.trim()) {
           requestData.w_required_course = inputEarlyWarningRequiredCourses.value.trim();
+        }
+        if (selectedDepartment.value.trim()) {
+          requestData.w_dept = selectedDepartment.value.trim();
         }
 
         try {
