@@ -12,6 +12,11 @@ import { useApiDataStore } from './store/apiDataStore';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+import { createPersistPlugin } from './persist.js';
+
+const pinia = createPinia();
+pinia.use(createPersistPlugin());
+
 document.body.style.background = 'url("./LoginVideo.mp4") center center / cover no-repeat';
 
 const app = createApp(App);

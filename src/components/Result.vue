@@ -220,6 +220,7 @@ import PrintContent from "./PrintContent.vue";
 import print from "vue3-print-nb";
 import { deptName, stdState } from "../components/TransformData.js";
 import sweetAlert from "../components/sweetAlert";
+import axios from "axios";
 
 import { Input, initMDB } from "mdb-ui-kit";
 initMDB({ Input });
@@ -267,6 +268,74 @@ export default {
       const seconds = String(date.getSeconds()).padStart(2, "0");
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
     };
+
+    // 頁面刷新 在次發送請求
+    axios.interceptors.request.use((request) => {
+      console.log("Starting Request", request);
+      return request;
+    });
+
+    axios.interceptors.response.use((response) => {
+      console.log("Response:", response);
+      return response;
+    });
+
+    const loadSearchData = async () => {
+      try {
+        const apiDataStore = useApiDataStore();
+        const formData = JSON.parse(localStorage.getItem("formData"));
+        if (!formData) {
+          throw new Error("formData is null or undefined");
+        }
+
+        // Convert formData to match the backend expected structure
+        const requestData = {
+          w_smtr: formData.inputAcademicYear + formData.inputSemester,
+          w_dept_no: formData.selectedDepartment || "",
+          w_course: formData.inputEarlyWarningCourses || null,
+          w_required_course: formData.inputEarlyWarningRequiredCourses || null,
+          w_std_no: formData.inputStudentID || null,
+          // Add any other fields as necessary
+        };
+
+        console.log("Sending Request with data:", requestData);
+
+        const response = await axios.post(
+          "http://localhost:5256/api/SemesterWarning/Combined",
+          requestData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response && response.status === 200) {
+          if (response.data && response.data.length > 0) {
+            console.log("相符資料：", response.data);
+            apiDataStore.setApiData(response.data);
+          } else {
+            sweetAlert.typicalType("發生錯誤", "無相符資料", "error", `OK`);
+          }
+        } else {
+          console.error("API 請求失敗:", response.statusText);
+          sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
+        }
+      } catch (error) {
+        console.error("Error during API request:", error);
+        sweetAlert.typicalType("發生錯誤", "搜尋失敗，請稍後再試", "error", `OK`);
+      }
+    };
+
+    onMounted(async () => {
+      await loadSearchData();
+    });
+
+    watch(router.currentRoute, async (to, from) => {
+      if (to.name !== from.name) {
+        await loadSearchData();
+      }
+    });
 
     // 學生科系轉換
     const departmentName = computed(() => {
@@ -354,10 +423,12 @@ export default {
       calculateStartAndEndIndex();
     });
 
+    // 切換勾選狀態
     const toggleCheckbox = (index) => {
       printSelection.value[index] = !printSelection.value[index];
     };
 
+    // 處理複選框點擊事件
     const handleCheckboxClick = (event, index) => {
       const pageIndex = (currentPage.value - 1) * itemsPerPage.value;
       const selectedIndex = pageIndex + index;
@@ -365,6 +436,7 @@ export default {
       updatePrintSelection();
     };
 
+    // 更改每頁顯示項目數
     const changePageSize = (value) => {
       itemsPerPage.value = parseInt(value);
       calculateEndIndex();
@@ -372,6 +444,7 @@ export default {
 
     const selectAll = ref(false);
 
+    // 重置checkbox
     function resetVariables() {
       currentPage.value = 1;
       startIndex.value = 1;
@@ -380,12 +453,14 @@ export default {
 
     const apiData = computed(() => apiDataStore.getApiData);
 
+    // 跳轉到指定頁面
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
       clearPrintSelection();
       currentPage.value = page;
     };
 
+    // 取消勾選
     const clearPrintSelection = () => {
       printSelection.value = Array.from(
         { length: apiDataStore.getApiData.length },
@@ -393,6 +468,7 @@ export default {
       );
     };
 
+    // 計算分頁
     const paginatedData = computed(() => {
       const dataToPaginate = searchQuery.value ? filteredData.value : apiData.value;
       if (!dataToPaginate) return [];
@@ -407,10 +483,12 @@ export default {
       return dataToPaginate.slice(startIdx, endIdx);
     });
 
+    // 獲取序號
     const getSerialNumber = (index) => {
       return (currentPage.value - 1) * itemsPerPage.value + index + 1;
     };
 
+    // DataTable 搜尋
     const filteredData = computed(() => {
       const regex = new RegExp(searchQuery.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
@@ -429,11 +507,13 @@ export default {
       });
     });
 
+    // 計算起始和結束索引
     function calculateStartAndEndIndex() {
       startIndex.value = (currentPage.value - 1) * itemsPerPage.value + 1;
       calculateEndIndex();
     }
 
+    // 計算結束索引
     function calculateEndIndex() {
       const startIdx = (currentPage.value - 1) * itemsPerPage.value + 1;
       const endIdx = currentPage.value * itemsPerPage.value;
@@ -441,6 +521,7 @@ export default {
       return endIndex;
     }
 
+    // 搜尋
     async function handleSearch() {
       try {
         const searchData = await fetchSearchData();
@@ -452,6 +533,7 @@ export default {
       }
     }
 
+    // 獲取搜尋資料
     async function fetchSearchData() {
       try {
         const response = await fetch("/api/search");
@@ -466,6 +548,7 @@ export default {
       }
     }
 
+    // 上一頁
     const prevPage = () => {
       if (currentPage.value > 1) {
         currentPage.value--;
@@ -474,6 +557,7 @@ export default {
       }
     };
 
+    // 下一頁
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
         currentPage.value++;
@@ -482,6 +566,7 @@ export default {
       }
     };
 
+    // 更新列印選擇
     const updatePrintSelection = async () => {
       const selectedIndexes = Object.keys(printSelection.value).filter(
         (index) => printSelection.value[index]
@@ -494,6 +579,7 @@ export default {
 
     const showPrintContent = ref(false);
 
+    // 列印
     const handlePrint = async () => {
       console.log("printSelection：", printSelection.value);
 
@@ -514,6 +600,7 @@ export default {
       }
     };
 
+    // 全選
     const buttonSelectAll = () => {
       selectAll.value = true;
       printSelection.value = Array.from(
@@ -523,12 +610,14 @@ export default {
       console.log(printSelection.value);
     };
 
+    // 取消全選
     const buttonDeselect = () => {
       selectAll.value = false;
       printSelection.value = [];
       console.log(printSelection.value);
     };
 
+    // 選擇改變事件
     const changedSelected = (event) => {
       console.log("Selected: ", printSelection.value);
       console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
@@ -565,6 +654,7 @@ export default {
       toggleCheckbox,
       handleCheckboxClick,
       changedSelected,
+      loadSearchData,
     };
   },
 };

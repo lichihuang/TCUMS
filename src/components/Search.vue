@@ -645,6 +645,7 @@ export default {
       });
     };
 
+    // 清除
     const buttonClear = async (event) => {
       event.preventDefault();
 
@@ -659,7 +660,7 @@ export default {
 
     // 從 sessionStorage 載資料
     const loadFormData = () => {
-      const formData = JSON.parse(sessionStorage.getItem("formData"));
+      const formData = JSON.parse(localStorage.getItem("formData"));
       if (formData) {
         inputEarlyWarningCourses.value = formData.inputEarlyWarningCourses;
         inputEarlyWarningRequiredCourses.value =
@@ -669,21 +670,25 @@ export default {
         inputSemester.value = formData.inputSemester;
         selectedCollege.value = formData.selectedCollege;
         selectedDepartment.value = formData.selectedDepartment;
+
+        //apiDataStore.setFormData(formData);
       }
     };
 
     // 將資料儲存到 sessionStorage
     const saveFormData = () => {
       const formData = {
-        inputEarlyWarningCourses: inputEarlyWarningCourses.value,
-        inputEarlyWarningRequiredCourses: inputEarlyWarningRequiredCourses.value,
-        inputStudentID: inputStudentID.value,
+        inputEarlyWarningCourses: inputEarlyWarningCourses.value.trim(),
+        inputEarlyWarningRequiredCourses: inputEarlyWarningRequiredCourses.value.trim(),
+        inputStudentID: inputStudentID.value.trim(),
         inputAcademicYear: inputAcademicYear.value,
         inputSemester: inputSemester.value,
-        selectedCollege: selectedCollege.value,
-        selectedDepartment: selectedDepartment.value,
+        selectedCollege: selectedCollege.value.trim(),
+        selectedDepartment: selectedDepartment.value.trim(),
       };
-      sessionStorage.setItem("formData", JSON.stringify(formData));
+      localStorage.setItem("formData", JSON.stringify(formData));
+      apiDataStore.setFormData(formData);
+      console.log("FormData:", formData);
     };
 
     // 在組件掛載時加載資料，組件卸載時保存資料
@@ -692,7 +697,7 @@ export default {
 
     // 頁面刷新時清除 sessionStorage 資料
     window.addEventListener("beforeunload", () => {
-      sessionStorage.removeItem("formData");
+      //localStorage.removeItem("formData");
     });
 
     return {

@@ -26,6 +26,7 @@
     "mdb-vue-ui-kit": "^4.1.1",
     "pdfkit": "^0.15.0",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "print-js": "^1.6.0",
     "roboto-fontface": "*",
     "sweetalert2": "^11.10.8",

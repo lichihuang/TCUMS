@@ -224,11 +224,17 @@ body {
     margin-left: 3%;
   }
 
-  .stair-img {
+  /* .stair-img {
     width: 100%;
     height: 15%;
     margin-left: -31%;
     margin-top: 27.5%;
+  } */
+  .stair-img {
+    width: 100%;
+    height: 15%;
+    margin-left: -31%;
+    margin-top: 55%;
   }
 }
 </style>
