@@ -235,24 +235,24 @@ export default {
   props: ["searchData"],
   setup(props) {
     const router = useRouter();
-    const pageOptions = [5, 10, 25, 50, 75, 100];
-    const currentPage = ref(1);
-    const itemsPerPage = ref(10);
+    const pageOptions = [5, 10, 25, 50, 75, 100]; // 每頁顯示項目數選項
+    const currentPage = ref(1); // 當前頁面
+    const itemsPerPage = ref(10); // 每頁顯示的項目數
     const totalItems = computed(() => {
       const dataToCount = searchQuery.value
         ? filteredData.value
         : apiDataStore.getApiData;
       return dataToCount ? dataToCount.length : 0;
-    });
-    const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
+    }); // 計算總項目數
+    const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value)); // 計算總頁數
     const resultTitle = ref("");
-    const printSelection = ref([]);
-    const searchQuery = ref("");
-    const filteredPages = ref([]);
-    const startIndex = ref(1);
+    const printSelection = ref([]); // 列印選擇項目
+    const searchQuery = ref(""); // 搜索查詢
+    const filteredPages = ref([]); // 篩選後的頁數
+    const startIndex = ref(1); // 起始索引
     const endIndex = computed(() => {
       return calculateEndIndex();
-    });
+    }); // 計算結束索引
 
     const apiDataStore = useApiDataStore();
 
@@ -354,17 +354,20 @@ export default {
       calculateStartAndEndIndex();
     });
 
+    // 切換勾選狀態
     const toggleCheckbox = (index) => {
       printSelection.value[index] = !printSelection.value[index];
     };
 
+    // 處理複選框點擊事件
     const handleCheckboxClick = (event, index) => {
       const pageIndex = (currentPage.value - 1) * itemsPerPage.value;
       const selectedIndex = pageIndex + index;
       printSelection.value[selectedIndex] = !printSelection.value[selectedIndex];
       updatePrintSelection();
     };
-
+    
+    // 更改每頁顯示項目數
     const changePageSize = (value) => {
       itemsPerPage.value = parseInt(value);
       calculateEndIndex();
@@ -372,6 +375,7 @@ export default {
 
     const selectAll = ref(false);
 
+    // 重置變量
     function resetVariables() {
       currentPage.value = 1;
       startIndex.value = 1;
@@ -380,12 +384,14 @@ export default {
 
     const apiData = computed(() => apiDataStore.getApiData);
 
+    // 跳轉到指定頁面
     const goToPage = (page) => {
       if (page < 1 || page > totalPages.value) return;
       clearPrintSelection();
       currentPage.value = page;
     };
 
+    // 取消勾選
     const clearPrintSelection = () => {
       printSelection.value = Array.from(
         { length: apiDataStore.getApiData.length },
@@ -393,6 +399,7 @@ export default {
       );
     };
 
+    // 計算分頁
     const paginatedData = computed(() => {
       const dataToPaginate = searchQuery.value ? filteredData.value : apiData.value;
       if (!dataToPaginate) return [];
@@ -407,10 +414,12 @@ export default {
       return dataToPaginate.slice(startIdx, endIdx);
     });
 
+    // 獲取序號
     const getSerialNumber = (index) => {
       return (currentPage.value - 1) * itemsPerPage.value + index + 1;
     };
 
+    // Table 搜尋
     const filteredData = computed(() => {
       const regex = new RegExp(searchQuery.value.trim(), "i");
       return apiDataStore.getApiData.filter((item) => {
@@ -429,11 +438,13 @@ export default {
       });
     });
 
+      // 計算起始和結束索引
     function calculateStartAndEndIndex() {
       startIndex.value = (currentPage.value - 1) * itemsPerPage.value + 1;
       calculateEndIndex();
     }
 
+    // 計算結束索引
     function calculateEndIndex() {
       const startIdx = (currentPage.value - 1) * itemsPerPage.value + 1;
       const endIdx = currentPage.value * itemsPerPage.value;
@@ -441,17 +452,19 @@ export default {
       return endIndex;
     }
 
+    // 搜尋
     async function handleSearch() {
       try {
         const searchData = await fetchSearchData();
-        console.log("搜索结果长度：", searchData.length);
+        console.log("搜尋結果長度：", searchData.length);
         totalItems.value = searchData.length;
         resetVariables();
       } catch (error) {
-        console.error("搜索发生错误：", error);
+        console.error("搜尋發生錯誤：", error);
       }
     }
 
+     // 獲取搜尋資料
     async function fetchSearchData() {
       try {
         const response = await fetch("/api/search");
@@ -466,6 +479,7 @@ export default {
       }
     }
 
+    // 上一頁
     const prevPage = () => {
       if (currentPage.value > 1) {
         currentPage.value--;
@@ -474,6 +488,7 @@ export default {
       }
     };
 
+    // 下一頁
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
         currentPage.value++;
@@ -482,6 +497,7 @@ export default {
       }
     };
 
+    // 更新列印選擇
     const updatePrintSelection = async () => {
       const selectedIndexes = Object.keys(printSelection.value).filter(
         (index) => printSelection.value[index]
@@ -494,6 +510,7 @@ export default {
 
     const showPrintContent = ref(false);
 
+    // 列印
     const handlePrint = async () => {
       console.log("printSelection：", printSelection.value);
 
@@ -514,6 +531,7 @@ export default {
       }
     };
 
+    // 全選
     const buttonSelectAll = () => {
       selectAll.value = true;
       printSelection.value = Array.from(
@@ -523,12 +541,14 @@ export default {
       console.log(printSelection.value);
     };
 
+    // 取消全選
     const buttonDeselect = () => {
       selectAll.value = false;
       printSelection.value = [];
       console.log(printSelection.value);
     };
 
+    // 選擇改變事件
     const changedSelected = (event) => {
       console.log("Selected: ", printSelection.value);
       console.log("apiDataStore 中被勾選的資料：", apiDataStore.getSelectedData);
