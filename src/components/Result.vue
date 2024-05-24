@@ -438,7 +438,7 @@ export default {
       });
     });
 
-      // 計算起始和結束索引
+    // 計算起始和結束索引
     function calculateStartAndEndIndex() {
       startIndex.value = (currentPage.value - 1) * itemsPerPage.value + 1;
       calculateEndIndex();
