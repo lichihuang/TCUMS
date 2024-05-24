@@ -288,14 +288,12 @@ export default {
           throw new Error("formData is null or undefined");
         }
 
-        // Convert formData to match the backend expected structure
         const requestData = {
           w_smtr: formData.inputAcademicYear + formData.inputSemester,
           w_dept_no: formData.selectedDepartment || "",
           w_course: formData.inputEarlyWarningCourses || null,
           w_required_course: formData.inputEarlyWarningRequiredCourses || null,
           w_std_no: formData.inputStudentID || null,
-          // Add any other fields as necessary
         };
 
         console.log("Sending Request with data:", requestData);
