@@ -523,11 +523,11 @@ export default {
     async function handleSearch() {
       try {
         const searchData = await fetchSearchData();
-        console.log("搜索结果长度：", searchData.length);
+        console.log("搜尋結果長度：", searchData.length);
         totalItems.value = searchData.length;
         resetVariables();
       } catch (error) {
-        console.error("搜索发生错误：", error);
+        console.error("搜尋發生錯誤：", error);
       }
     }
 
